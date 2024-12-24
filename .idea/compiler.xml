@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerConfiguration">
+    <bytecodeTargetLevel>
+      <module name="Loopi.core.firebase" target="21" />
+      <module name="Loopi.core.mylibrary" target="21" />
+      <module name="Loopi.dynamicfeature" target="21" />
+      <module name="Loopi.main_screen" target="21" />
+    </bytecodeTargetLevel>
+  </component>
+</project>
