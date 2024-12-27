@@ -21,11 +21,10 @@ dependencyResolutionManagement {
 
 rootProject.name = "Loopi"
 include(":app")
-include(":core:pexels_api")
+include(":core:pexelsApi")
 include(":core:data")
 include(":core:database")
 include(":core:domain")
-include(":core:firebase_servises")
-
+include(":core:firebaseServises")
 include(":features:main_screen")
 include(":uikit")
