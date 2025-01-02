@@ -2,11 +2,14 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <bytecodeTargetLevel>
+      <module name="Loopi.app.debug" target="21" />
       <module name="Loopi.core.firebase" target="21" />
       <module name="Loopi.core.mylibrary" target="21" />
       <module name="Loopi.core.pexels_api.main" target="11" />
       <module name="Loopi.core.pexels_api.test" target="11" />
+      <module name="Loopi.di" target="21" />
       <module name="Loopi.dynamicfeature" target="21" />
+      <module name="Loopi.features.mainScreen" target="21" />
       <module name="Loopi.main_screen" target="21" />
     </bytecodeTargetLevel>
   </component>

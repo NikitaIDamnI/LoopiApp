@@ -42,7 +42,12 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
+
+
+    //Material
     implementation(libs.material)
+    implementation (libs.androidx.material.icons)
+
 
     //UI
     api(libs.androidx.ui.tooling.preview)
@@ -59,4 +64,7 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+
+    implementation(project(":core:domain"))
+
 }

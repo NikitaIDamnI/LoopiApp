@@ -14,11 +14,13 @@
             <option value="$PROJECT_DIR$/core" />
             <option value="$PROJECT_DIR$/core/data" />
             <option value="$PROJECT_DIR$/core/database" />
+            <option value="$PROJECT_DIR$/core/di" />
             <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/firebaseServises" />
             <option value="$PROJECT_DIR$/core/pexelsApi" />
             <option value="$PROJECT_DIR$/features" />
-            <option value="$PROJECT_DIR$/features/main_screen" />
+            <option value="$PROJECT_DIR$/features/authScreen" />
+            <option value="$PROJECT_DIR$/features/home_screen" />
             <option value="$PROJECT_DIR$/uikit" />
           </set>
         </option>

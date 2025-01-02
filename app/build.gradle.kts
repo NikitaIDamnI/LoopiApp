@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.dagger.hilt.android)
+    alias(libs.plugins.kapt)
 }
 
 android {
@@ -16,6 +18,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
 
     buildTypes {
@@ -36,15 +39,29 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
 }
 
 dependencies {
 
+//Lifecycle
+
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.core.splashscreen)
+
+//Hilt
+    implementation(libs.dagger.hilt.android)
+    implementation(project(":features:home_screen"))
+    kapt(libs.dagger.hilt.compiler)
+
+    //Coil
+    implementation(libs.coil.core)
+    implementation(libs.coil.compose)
+
 
 
 //Test
@@ -56,4 +73,12 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 //Modules
     implementation(project(":uikit"))
+    implementation(project(":core:di"))
+    implementation(project(":core:domain"))
+    implementation(project(":features:authScreen"))
+
+
+
+
+
 }

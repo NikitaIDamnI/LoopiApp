@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.ksp)
     alias(libs.plugins.detekt)
+   // alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.kapt)
 
 
@@ -24,6 +25,12 @@ dependencies{
     //Kotlinx
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.annotation)
+
+//    //Hilt
+//    implementation(libs.dagger.hilt.android)
+//    kapt(libs.dagger.hilt.compiler)
+
+
 
     //Retrofit
     implementation(libs.retrofit)

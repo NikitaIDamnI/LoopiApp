@@ -1,9 +1,9 @@
-import org.gradle.kotlin.dsl.invoke
-
 plugins {
+    id("java-library")
     alias(libs.plugins.jetbrains.kotlin.jvm)
     alias(libs.plugins.kotlinSerialization)
-
+    alias(libs.plugins.kapt)
+    alias(libs.plugins.detekt)
 }
 
 java {
@@ -17,8 +17,12 @@ kotlin {
     }
 }
 
-dependencies {
+dependencies{
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.javax.inject)
     api(libs.kotlinx.serialization.json)
     api(libs.androidx.annotation)
-    implementation(libs.androidx.appcompat)
+
 }
+
+
