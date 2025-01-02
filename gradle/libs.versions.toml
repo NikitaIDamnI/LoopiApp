@@ -1,6 +1,7 @@
 [versions]
-agp = "8.7.2"
+agp = "8.7.3"
 converterMoshi = "2.9.0"
+javax = "1"
 jsoup = "1.18.1"
 kotlin = "2.0.21"
 kotlin-serialization-json = "1.7.1"
@@ -41,6 +42,12 @@ uiautomatorVersion = "2.3.0"
 benchmarkMacroJunit4Version = "1.3.2"
 baselineprofile = "1.2.4"
 coreSplashscreen = "1.0.1"
+materialIcons = "1.7.6"
+material3AdaptiveNavigationSuiteVersion = "1.4.0-alpha05"
+material3WindowSizeClass = "1.3.1"
+
+
+
 
 [libraries]
 #Core
@@ -50,8 +57,10 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 
 #Material
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
-material-icons = { group = "androidx.compose.material", name = "material-icons-extended" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
+androidx-material3-adaptive-navigation-suite = { module = "androidx.compose.material3:material3-adaptive-navigation-suite", version.ref = "material3AdaptiveNavigationSuiteVersion" }
+androidx-material3-window = { module = "androidx.compose.material3:material3-window-size-class", version.ref = "material3WindowSizeClass" }
+androidx-material-icons = { module = "androidx.compose.material:material-icons-extended-android", version.ref = "materialIcons" }
 
 #Moshi
 moshi = { module = "com.squareup.moshi:moshi", version.ref = "moshi" }
@@ -68,6 +77,8 @@ androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-
 dagger-hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "dagger" }
 dagger-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "dagger" }
 dagger-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+javax-inject = { module = "javax.inject:javax.inject", version.ref = "javax" }
+
 
 #Room Database
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
@@ -142,4 +153,5 @@ androidx-room = { id = "androidx.room", version.ref = "room" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 android-test = { id = "com.android.test", version.ref = "agp" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
+
 
