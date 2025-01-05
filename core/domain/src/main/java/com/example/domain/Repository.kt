@@ -1,8 +1,6 @@
 package com.example.domain
 
-import androidx.annotation.IntRange
-import com.example.domain.models.ResultPhoto
-import com.example.domain.models.ResultVideo
+import com.example.domain.models.ResultContent
 import kotlinx.coroutines.flow.Flow
 
 interface Repository {
@@ -14,12 +12,12 @@ interface Repository {
         locale: String? = null,
         page: Int = 1,
         perPage: Int = 15,
-    ): Flow<Result<ResultPhoto>>
+    ): Flow<Result<ResultContent>>
 
      fun getPopularPhotos(
         page: Int = 1,
         perPage: Int = 15,
-    ): Flow<Result<ResultPhoto>>
+    ): Flow<Result<ResultContent>>
 
 
      fun searchVideos(
@@ -29,7 +27,7 @@ interface Repository {
         locale: String? = null,
         page: Int = 1,
         perPage: Int = 15,
-    ): Flow<Result<ResultVideo>>
+    ): Flow<Result<ResultContent>>
 
      fun getPopularVideos(
         minWidth: Int? = null,
@@ -38,7 +36,7 @@ interface Repository {
         maxDuration: Int? = null,
         page: Int = 1,
         perPage: Int = 15,
-    ): Flow<Result<ResultVideo>>
+    ): Flow<Result<ResultContent>>
 
      //fun likeResource(id: Int): Flow<Boolean>
      //fun saveResource(id: Int)

@@ -5,6 +5,7 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -33,6 +36,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
@@ -40,6 +44,7 @@ import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import com.example.home_screen.content.models.Tabs
+import com.example.uikit.cards.ContentCard
 import com.example.uikit.theme.ColorMainGreen
 import com.example.uikit.theme.InactiveColor
 
@@ -60,6 +65,10 @@ fun HomeScreen(
     var tabHeight = remember { mutableStateOf(Tabs.MAX_HEIGHT.dp) }
     var selectedTab = remember { mutableStateOf(Tabs.TRENDS) }
 
+    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
+    val columnWidth = 200.dp // Ширина одного элемента
+    val columns = (screenWidth / columnWidth).toInt().coerceAtLeast(1)
+
     val nestedScrollConnection = rememberNestedScrollConnection(
         tabHeightState = { tabHeight.value },
         onTabHeightChange = { tabHeight.value = it }
@@ -74,27 +83,30 @@ fun HomeScreen(
             modifier = Modifier
                 .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
                 .width(700.dp)
+
                 .align(Alignment.CenterHorizontally),
+
             tabs = Tabs.entries,
             selectedTab = selectedTab,
             onTabSelected = { selectedTab.value = it },
             tabHeight = tabHeight,
         )
 
-        LazyColumn(
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(columns),
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-
-
+                .padding(top = 5.dp, start = 10.dp, end = 10.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalArrangement = Arrangement.spacedBy(10.dp)
         ) {
             items(100) { index ->
-                Text(
-                    text = "Контент $index",
-                    fontSize = 18.sp,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
+                ContentCard(
+                    modifier = Modifier,
+                    heightPhoto = 350.dp,
+                    onClickContent = {},
+                    onSetting = {}
                 )
             }
         }

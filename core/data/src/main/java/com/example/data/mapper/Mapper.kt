@@ -1,11 +1,10 @@
 package com.example.data.mapper
 
-import com.example.domain.models.Photo
-import com.example.domain.models.ResultPhoto
-import com.example.domain.models.ResultVideo
+import com.example.domain.models.Content.Photo
+import com.example.domain.models.Content.Video
+import com.example.domain.models.ResultContent
 import com.example.domain.models.Src
 import com.example.domain.models.User
-import com.example.domain.models.Video
 import com.example.domain.models.VideoFile
 import com.example.domain.models.VideoPicture
 import com.example.pexels_api.models.PhotoDto
@@ -17,10 +16,10 @@ import com.example.pexels_api.models.VideoFileDto
 import com.example.pexels_api.models.VideoPictureDto
 import com.example.pexels_api.models.VideoResultDto
 
-fun PhotoResultDto.toDomain(): ResultPhoto = ResultPhoto(
+fun PhotoResultDto.toDomain(): ResultContent = ResultContent(
     page = page,
     perPage = perPage,
-    photos = photos.map { it.toDomain() },
+    content = photos.map { it.toDomain() },
     nextPage = nextPage
 )
 
@@ -49,10 +48,10 @@ fun SrcDto.toDomain(): Src = Src(
     medium = medium?: ""
 )
 
-fun VideoResultDto.toDomain(): ResultVideo = ResultVideo(
+fun VideoResultDto.toDomain(): ResultContent = ResultContent(
     page = page,
     perPage = perPage,
-    videos = videos.map { it.toDomain() },
+    content = videos.map { it.toDomain() },
     nextPage = nextPage
 )
 
