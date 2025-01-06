@@ -26,7 +26,10 @@ class NavigationState(
     }
 
     fun navigateToContentDetails(content: Content) {
-        navController.navigate(Screen.ContentDetails(content))
+        navController.navigate(Screen.ContentDetails)
+    }
+    fun navigateToAuth() {
+        navController.navigate(Screen.Authorization)
     }
 
 }

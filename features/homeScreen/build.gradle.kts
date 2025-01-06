@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.home_screen"
+    namespace = "com.example.homeScreen"
     compileSdk = 34
 
     defaultConfig {

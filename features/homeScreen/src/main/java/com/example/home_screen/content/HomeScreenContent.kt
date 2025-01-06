@@ -50,17 +50,15 @@ import com.example.uikit.theme.InactiveColor
 
 
 @Composable
-fun HomeScreenContent(modifier: Modifier = Modifier, paddingValues: PaddingValues) {
-    HomeScreen(
+fun HomeScreen(modifier: Modifier = Modifier) {
+    HomeScreenContent(
         modifier = modifier,
-        paddingValues = paddingValues
     )
 }
 
 @Composable
-fun HomeScreen(
+private fun HomeScreenContent(
     modifier: Modifier = Modifier,
-    paddingValues: PaddingValues,
 ) {
     var tabHeight = remember { mutableStateOf(Tabs.MAX_HEIGHT.dp) }
     var selectedTab = remember { mutableStateOf(Tabs.TRENDS) }
@@ -96,7 +94,6 @@ fun HomeScreen(
             columns = GridCells.Fixed(columns),
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
                 .padding(top = 5.dp, start = 10.dp, end = 10.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
             horizontalArrangement = Arrangement.spacedBy(10.dp)
@@ -135,7 +132,8 @@ internal fun TabRowWithTabs(
 
     TabRow(
         modifier = modifier
-            .height(tabHeight.value),
+            .height(tabHeight.value)
+        ,
         selectedTabIndex = selectedTab.index,
         contentColor = ColorMainGreen,
         containerColor = colorAnimate.value,

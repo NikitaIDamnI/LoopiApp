@@ -55,7 +55,6 @@ dependencies {
 
 //Hilt
     implementation(libs.dagger.hilt.android)
-    implementation(project(":features:home_screen"))
     kapt(libs.dagger.hilt.compiler)
 
     //Coil
@@ -76,6 +75,9 @@ dependencies {
     implementation(project(":core:di"))
     implementation(project(":core:domain"))
     implementation(project(":features:authScreen"))
+    implementation(project(":features:homeScreen"))
+    implementation(project(":features:navigation"))
+
 
 
 

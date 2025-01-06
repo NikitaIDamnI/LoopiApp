@@ -4,38 +4,35 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.domain.models.NavigationType
-import com.example.domain.models.Screen
-import com.example.domain.models.Screen.ContentDetails
 
-//object Authorization : Screen()
-//object Home : Screen()
-//object Search : Screen()
-//object AddScreen : Screen()
-//object Profile : Screen()
-//object Notifications : Screen()
-//object Filter : Screen()
-//data class ContentDetails(val content: Content) : Screen()
+import com.example.domain.models.Content
+
+import com.example.domain.models.Screen
+import kotlin.reflect.typeOf
+
 
 @Composable
 fun AppNavigationGraph(
     navController: NavHostController,
-    navigationScreen: @Composable (NavHostController) -> Unit,
+    navigationScreen: @Composable () -> Unit,
     authScreen: @Composable () -> Unit,
     contentDetails: @Composable () -> Unit,
-    startDestination: NavigationType = Screen.Home
 ) {
     NavHost(
         navController = navController,
-        startDestination = startDestination
+        startDestination = Screen.NavigationScreen
     ) {
-        composable<NavigationType.AuthNavigation> {
+        composable<Screen.Authorization> {
             authScreen()
         }
-        composable<NavigationType.MainNavigation> {
-            navigationScreen(navController)
+        composable<Screen.NavigationScreen> {
+            navigationScreen()
         }
-        composable<NavigationType.ContentDetailsNavigation> {
+        composable<Screen.ContentDetails> (
+            typeMap = mapOf(
+                typeOf<Content>() to toNavType<Content>()
+            )
+        ){
             contentDetails()
         }
     }

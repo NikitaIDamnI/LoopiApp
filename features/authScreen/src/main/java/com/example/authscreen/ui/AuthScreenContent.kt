@@ -13,6 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.domain.models.Registration
 import com.example.uikit.R
 import com.example.uikit.cards.RegistrationCard
@@ -21,11 +23,13 @@ import com.example.uikit.theme.MainBackgroundColor
 
 @Composable
 fun AuthScreenContent(
-    modifier: Modifier = Modifier, onLoginRequest: (Registration) -> Unit,
+    modifier: Modifier = Modifier,
+    onLoginRequest: (Registration) -> Unit,
     onGuestRequest: () -> Unit,
 ) {
     AuthScreen(
         modifier = modifier,
+        viewModel = hiltViewModel(),
         onLoginRequest = onLoginRequest,
         onGuestRequest = onGuestRequest
     )
@@ -34,6 +38,7 @@ fun AuthScreenContent(
 @Composable
 internal fun AuthScreen(
     modifier: Modifier = Modifier,
+    viewModel: AuthViewModel,
     onLoginRequest: (Registration) -> Unit,
     onGuestRequest: () -> Unit,
 ) {

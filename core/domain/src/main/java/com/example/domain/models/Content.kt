@@ -1,5 +1,8 @@
 package com.example.domain.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 sealed class Content {
     data class Photo(
         val id: Int,
@@ -15,6 +18,7 @@ sealed class Content {
         val alt: String,
     ): Content()
 
+    @Serializable
     data class Video(
         val id: Int,
         val width: Int,
@@ -34,7 +38,7 @@ sealed class Content {
 
 
 
-
+@Serializable
 data class VideoFile(
     val id: Int,
     val quality: String,
@@ -45,13 +49,14 @@ data class VideoFile(
     val link: String,
 )
 
+@Serializable
 data class VideoPicture(
     val id: Int,
     val picture: String,
     val nr: Int,
 )
 
-
+@Serializable
 data class Src(
     val original: String = "",
     val large2x: String = "",
