@@ -2,12 +2,13 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.kapt)
 }
 
 android {
-    namespace = "com.example.home_screen"
+    namespace = "com.example.navigation"
     compileSdk = 34
 
     defaultConfig {
@@ -39,16 +40,7 @@ android {
 }
 
 dependencies {
-
-    //Lifecycle
-    implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
-    implementation(libs.androidx.lifecycle.viewmodel.compose)
-
-    //Hilt
-    implementation(libs.dagger.hilt.android)
-    kapt(libs.dagger.hilt.compiler)
-
+    
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -56,8 +48,17 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    //NavigationCompose
+    api(libs.androidx.navigation.compose)
+    api(libs.dagger.hilt.navigation.compose)
+
+    //Hilt
+    implementation(libs.dagger.hilt.android)
+    kapt(libs.dagger.hilt.compiler)
+
+
+
     implementation(project(":core:di"))
     implementation(project(":core:domain"))
     implementation(project(":uikit"))
-
 }

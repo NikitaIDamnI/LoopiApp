@@ -19,6 +19,7 @@ val TextColorLogging = Color(0xFF74966F)
 val InactiveColor = Color(0xFFAEB6AE)
 
 
+
 val BrushShadow = Brush.linearGradient(
     colorStops = arrayOf(
         0.1f to Color.Transparent,

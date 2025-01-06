@@ -5,6 +5,8 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -39,13 +41,14 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.domain.models.Content
 import com.example.domain.models.Registration
 import com.example.uikit.R
 import com.example.uikit.loginUiKit.LoggingBottoms
 import com.example.uikit.loginUiKit.LoggingTextField
-
 import com.example.uikit.theme.ColorMainGreen
 import com.example.uikit.theme.MontserratRegular
 
@@ -163,19 +166,40 @@ fun RegistrationCard(
 @Composable
 fun ContentCard(
     modifier: Modifier = Modifier,
+    photo: Content? = null,
     onClickContent: (String) -> Unit,
     onSetting: () -> Unit,
-) {
-    Card(
-        modifier = modifier
-    ) {
-        Image(
-            modifier = Modifier.clickable(onClick = {onClickContent("")}),
-            painter = painterResource(R.drawable.auth_background), contentDescription = null
-        )
-        Icon(imageVector = Icons.Default.MoreHoriz,contentDescription = "more",)
+    heightPhoto: Dp = 300.dp,
 
+    ) {
+    val width = 200.dp
+    Column(modifier = modifier.width(width)) {
+        Card {
+            Image(
+                modifier = Modifier
+                    .width(width)
+                    .height(heightPhoto)
+                    .clickable(onClick = { onClickContent("") })
+                    .clip(CardDefaults.shape),
+                painter = painterResource(R.drawable.auth_background),
+                contentScale = ContentScale.Crop,
+                contentDescription = null
+            )
+        }
+
+        Row {
+            Spacer(modifier = Modifier.weight(1f))
+            Icon(
+                modifier = Modifier.clickable(
+                    onClick = onSetting,
+                    indication = null,
+                    interactionSource = remember { MutableInteractionSource() }),
+                imageVector = Icons.Default.MoreHoriz,
+                contentDescription = "more",
+            )
+        }
     }
+
 }
 
 @Preview
