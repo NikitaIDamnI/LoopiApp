@@ -3,7 +3,7 @@ package com.example.domain
 import com.example.domain.models.ResultContent
 import kotlinx.coroutines.flow.Flow
 
-interface Repository {
+interface ContentRepository {
      fun searchPhotos(
         query: String,
         orientation: String? = null,
