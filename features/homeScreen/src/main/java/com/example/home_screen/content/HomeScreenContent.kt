@@ -125,7 +125,8 @@ internal fun TabRowWithTabs(
             if (tabHeight.value == Tabs.MAX_HEIGHT.dp) {
                 ColorMainGreen
             } else {
-                ColorMainGreen.copy((tabHeight.value.value / 100 + 0.4f))
+                val alpha = (tabHeight.value.value / 100f + 0.4f).coerceIn(0f, 1f)
+                ColorMainGreen.copy(alpha)
             }
         }
     }

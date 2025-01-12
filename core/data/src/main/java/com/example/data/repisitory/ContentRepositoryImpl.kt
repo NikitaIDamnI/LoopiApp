@@ -1,7 +1,7 @@
 package com.example.data.repisitory
 
 import com.example.data.mapper.toDomain
-import com.example.domain.Repository
+import com.example.domain.ContentRepository
 import com.example.domain.models.ResultContent
 import com.example.pexels_api.PexelsApi
 import javax.inject.Inject
@@ -9,11 +9,11 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-class RepositoryImpl @Inject constructor(
+class ContentRepositoryImpl @Inject constructor(
     private val pexelsApi: PexelsApi,
     // private val firebaseServises: FirebaseServises,
     //private val database: Database
-) : Repository {
+) : ContentRepository {
 
     override fun searchPhotos(
         query: String,

@@ -1,7 +1,7 @@
 package com.example.di
 
-import com.example.data.repisitory.RepositoryImpl
-import com.example.domain.Repository
+import com.example.data.repisitory.ContentRepositoryImpl
+import com.example.domain.ContentRepository
 import com.example.pexels_api.PexelsApi
 import dagger.Binds
 import dagger.Module
@@ -17,9 +17,11 @@ import javax.inject.Singleton
 interface AppModule {
 
     @Binds
-    fun bindsRepository(repositoryImpl: RepositoryImpl): Repository
+    fun bindsRepository(repositoryImpl: ContentRepositoryImpl): ContentRepository
 
     companion object{
+
+        @Singleton
         @Provides
         fun providesPexelsApi(
             okHttpClient: OkHttpClient
@@ -31,6 +33,7 @@ interface AppModule {
             )
 
         }
+
         @Provides
         @Singleton
         fun provideOkhttpClient(): OkHttpClient {

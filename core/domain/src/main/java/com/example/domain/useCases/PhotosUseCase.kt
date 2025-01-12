@@ -1,11 +1,11 @@
 package com.example.domain.useCases
 
-import com.example.domain.Repository
+import com.example.domain.ContentRepository
 import javax.inject.Inject
 
 
 class PhotosUseCase @Inject constructor(
-    private val repository: Repository,
+    private val repository: ContentRepository,
 ) {
     fun searchPhotos(
         query: String,
