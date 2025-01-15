@@ -17,7 +17,7 @@ interface ContentRepository {
      fun getPopularPhotos(
         page: Int = 1,
         perPage: Int = 15,
-    ): Flow<Result<ResultContent>>
+    ): Flow<ResultContent>
 
 
      fun searchVideos(
