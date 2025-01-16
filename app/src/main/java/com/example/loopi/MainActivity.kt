@@ -46,6 +46,8 @@ class MainActivity : ComponentActivity() {
                             homeScreen = {
                                 HomeScreen(
                                     modifier = Modifier,
+                                    onClickContent = {},
+                                    onSetting = {}
                                 )
                             },
                             searchScreen = {},

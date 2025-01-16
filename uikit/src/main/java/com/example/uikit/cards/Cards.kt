@@ -2,6 +2,8 @@ package com.example.uikit.cards
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
@@ -43,7 +45,10 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
+import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.domain.models.Content
 import com.example.domain.models.Registration
 import com.example.uikit.R
@@ -51,6 +56,7 @@ import com.example.uikit.loginUiKit.LoggingBottoms
 import com.example.uikit.loginUiKit.LoggingTextField
 import com.example.uikit.theme.ColorMainGreen
 import com.example.uikit.theme.MontserratRegular
+
 
 @Composable
 fun RegistrationCard(
@@ -166,28 +172,21 @@ fun RegistrationCard(
 @Composable
 fun ContentCard(
     modifier: Modifier = Modifier,
-    photo: Content? = null,
+    content: Content,
     onClickContent: (String) -> Unit,
     onSetting: () -> Unit,
-    heightPhoto: Dp = 300.dp,
-
-    ) {
+) {
     val width = 200.dp
-    Column(modifier = modifier.width(width)) {
-        Card {
-            Image(
-                modifier = Modifier
-                    .width(width)
-                    .height(heightPhoto)
-                    .clickable(onClick = { onClickContent("") })
-                    .clip(CardDefaults.shape),
-                painter = painterResource(R.drawable.auth_background),
-                contentScale = ContentScale.Crop,
-                contentDescription = null
-            )
+    Column(modifier.clip(shape = CardDefaults.shape).background(Color.Transparent.copy(0.1f))){
+        when (val content = content) {
+            is Content.Photo -> {
+                CardPhoto(content, width, onClickContent)
+            }
+
+            is Content.Video -> {}
         }
 
-        Row {
+        Row (modifier= Modifier.padding(end = 5.dp)){
             Spacer(modifier = Modifier.weight(1f))
             Icon(
                 modifier = Modifier.clickable(
@@ -200,6 +199,26 @@ fun ContentCard(
         }
     }
 
+}
+
+@Composable
+private fun CardPhoto(
+    content: Content.Photo,
+    width: Dp,
+    onClickContent: (String) -> Unit,
+) {
+    val heightPhoto = min(300.dp, (content.height / 10).dp)
+    Card {
+        AsyncImage(
+            model = content.src.original,
+            contentDescription = null,
+            modifier = Modifier
+                .width(width)
+                .height(heightPhoto)
+                .clickable(onClick = { onClickContent(content.url) }),
+            contentScale = ContentScale.Crop
+        )
+    }
 }
 
 @Preview

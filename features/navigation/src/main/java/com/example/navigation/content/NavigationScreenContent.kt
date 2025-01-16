@@ -1,5 +1,6 @@
 package com.example.navigation.content
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -15,6 +16,7 @@ import com.example.domain.models.Screen
 import com.example.navigation.NavigationItem
 import com.example.navigation.NavigationScreenGraph
 import com.example.navigation.rememberNavigationState
+import com.example.uikit.theme.MainBackgroundColor
 
 @Composable
 fun NavigationScreen(
@@ -65,7 +67,7 @@ private fun NavigationScreenContent(
             )
         }
     ) { innerPadding ->
-        Box (modifier = Modifier.padding(innerPadding)){
+        Box (modifier = Modifier.padding(innerPadding).background(MainBackgroundColor)){
             innerPadding
             NavigationScreenGraph(
                 navController = navController,

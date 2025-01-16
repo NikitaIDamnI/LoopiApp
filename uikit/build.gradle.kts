@@ -58,6 +58,11 @@ dependencies {
     api(libs.androidx.activity.compose)
     api(platform(libs.androidx.compose.bom))
 
+  
+    //Coil
+    implementation(libs.coil.core)
+    implementation(libs.coil.compose)
+
 
     //Test
     testImplementation(libs.junit)

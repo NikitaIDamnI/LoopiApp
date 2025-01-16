@@ -5,17 +5,11 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Tab
 import androidx.compose.material3.TabRow
@@ -24,6 +18,7 @@ import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,36 +31,44 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.NestedScrollSource
 import androidx.compose.ui.input.nestedscroll.nestedScroll
-import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.home_screen.content.models.Tabs
-import com.example.uikit.cards.ContentCard
+import com.example.uikit.custom.ListContent
 import com.example.uikit.theme.ColorMainGreen
 import com.example.uikit.theme.InactiveColor
 
 
 @Composable
-fun HomeScreen(modifier: Modifier = Modifier) {
+fun HomeScreen(
+    modifier: Modifier = Modifier,
+    onClickContent: (String) -> Unit,
+    onSetting: () -> Unit,
+) {
     HomeScreenContent(
         modifier = modifier,
+        viewModel = hiltViewModel(),
+        onClickContent = onClickContent,
+        onSetting = onSetting
     )
 }
 
 @Composable
 private fun HomeScreenContent(
     modifier: Modifier = Modifier,
+    viewModel: HomeScreenViewModel,
+    onClickContent: (String) -> Unit,
+    onSetting: () -> Unit,
 ) {
+    val state = viewModel.state.collectAsState()
     var tabHeight = remember { mutableStateOf(Tabs.MAX_HEIGHT.dp) }
     var selectedTab = remember { mutableStateOf(Tabs.TRENDS) }
 
-    val screenWidth = LocalConfiguration.current.screenWidthDp.dp
-    val columnWidth = 200.dp // Ширина одного элемента
-    val columns = (screenWidth / columnWidth).toInt().coerceAtLeast(1)
 
     val nestedScrollConnection = rememberNestedScrollConnection(
         tabHeightState = { tabHeight.value },
@@ -81,37 +84,24 @@ private fun HomeScreenContent(
             modifier = Modifier
                 .clip(RoundedCornerShape(bottomStart = 20.dp, bottomEnd = 20.dp))
                 .width(700.dp)
-
                 .align(Alignment.CenterHorizontally),
-
             tabs = Tabs.entries,
             selectedTab = selectedTab,
             onTabSelected = { selectedTab.value = it },
             tabHeight = tabHeight,
         )
-
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(columns),
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(top = 5.dp, start = 10.dp, end = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            items(100) { index ->
-                ContentCard(
-                    modifier = Modifier,
-                    heightPhoto = 350.dp,
-                    onClickContent = {},
-                    onSetting = {}
-                )
-            }
-        }
+        ListContent(
+            modifier = Modifier.padding(top = 2.dp, start = 5.dp, end = 5.dp),
+            content = state.value.content,
+            onClickContent = onClickContent,
+            onSettingContent = onSetting,
+        )
     }
+
 }
 
 @Composable
-internal fun TabRowWithTabs(
+private fun TabRowWithTabs(
     modifier: Modifier = Modifier,
     tabs: List<Tabs>,
     selectedTab: State<Tabs>,
@@ -125,15 +115,15 @@ internal fun TabRowWithTabs(
             if (tabHeight.value == Tabs.MAX_HEIGHT.dp) {
                 ColorMainGreen
             } else {
-                ColorMainGreen.copy((tabHeight.value.value / 100 + 0.4f))
+                val alpha = (tabHeight.value.value / 100f + 0.4f).coerceIn(0f, 1f)
+                ColorMainGreen.copy(alpha)
             }
         }
     }
 
     TabRow(
         modifier = modifier
-            .height(tabHeight.value)
-        ,
+            .height(tabHeight.value),
         selectedTabIndex = selectedTab.index,
         contentColor = ColorMainGreen,
         containerColor = colorAnimate.value,
@@ -225,3 +215,10 @@ private fun rememberNestedScrollConnection(
         }
     }
 }
+
+
+
+
+
+
+

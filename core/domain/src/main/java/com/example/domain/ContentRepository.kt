@@ -3,7 +3,7 @@ package com.example.domain
 import com.example.domain.models.ResultContent
 import kotlinx.coroutines.flow.Flow
 
-interface Repository {
+interface ContentRepository {
      fun searchPhotos(
         query: String,
         orientation: String? = null,
@@ -17,7 +17,7 @@ interface Repository {
      fun getPopularPhotos(
         page: Int = 1,
         perPage: Int = 15,
-    ): Flow<Result<ResultContent>>
+    ): Flow<ResultContent>
 
 
      fun searchVideos(

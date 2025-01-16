@@ -1,7 +1,8 @@
 package com.example.data.repisitory
 
+import com.example.common.utils.logD
 import com.example.data.mapper.toDomain
-import com.example.domain.Repository
+import com.example.domain.ContentRepository
 import com.example.domain.models.ResultContent
 import com.example.pexels_api.PexelsApi
 import javax.inject.Inject
@@ -9,11 +10,9 @@ import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 
-class RepositoryImpl @Inject constructor(
+class ContentRepositoryImpl @Inject constructor(
     private val pexelsApi: PexelsApi,
-    // private val firebaseServises: FirebaseServises,
-    //private val database: Database
-) : Repository {
+) : ContentRepository {
 
     override fun searchPhotos(
         query: String,
@@ -37,13 +36,15 @@ class RepositoryImpl @Inject constructor(
     override fun getPopularPhotos(
         page: Int,
         perPage: Int,
-    ): Flow<Result<ResultContent>> = callbackFlow {
+    ): Flow<ResultContent> = callbackFlow {
+        logD(this@ContentRepositoryImpl, "getPopularPhotos : Start")
         pexelsApi.getPopularPhotos(page, perPage)
             .onSuccess { dto ->
-                trySend(Result.success(dto.toDomain()))
+                logD(this@ContentRepositoryImpl, dto.toString())
+                trySend(dto.toDomain())
             }
             .onFailure {
-                trySend(Result.failure(it))
+                trySend(throw RuntimeException(it))
             }
         awaitClose()
     }
@@ -57,7 +58,7 @@ class RepositoryImpl @Inject constructor(
         page: Int,
         perPage: Int,
     ): Flow<Result<ResultContent>> = callbackFlow {
-        pexelsApi.searchVideos(query, orientation, size, locale, page)
+       pexelsApi.searchVideos(query, orientation, size, locale, page)
             .onSuccess { dto ->
                 trySend(Result.success(dto.toDomain()))
             }
@@ -77,6 +78,8 @@ class RepositoryImpl @Inject constructor(
     ): Flow<Result<ResultContent>> = callbackFlow {
         pexelsApi.getPopularVideos(minWidth, minHeight, minDuration, maxDuration, page, perPage)
             .onSuccess { dto ->
+                logD(this@ContentRepositoryImpl, dto.toString())
+
                 trySend(Result.success(dto.toDomain()))
             }
             .onFailure {

@@ -1,12 +1,12 @@
 package com.example.domain.useCases
 
-import com.example.domain.Repository
+import com.example.domain.ContentRepository
 import javax.inject.Inject
 
-
-class PhotosUseCase @Inject constructor(
-    private val repository: Repository,
+class SearchUseCase @Inject constructor(
+    private val repository: ContentRepository,
 ) {
+
     fun searchPhotos(
         query: String,
         orientation: String? = null,
@@ -17,8 +17,13 @@ class PhotosUseCase @Inject constructor(
         perPage: Int = 15,
     ) = repository.searchPhotos(query, orientation, size, color, locale, page, perPage)
 
-    fun getPhotos(
+    fun searchVideos(
+        query: String,
+        orientation: String? = null,
+        size: String? = null,
+        locale: String? = null,
         page: Int = 1,
-        perPage: Int = 15
-    ) = repository.getPopularPhotos(page, perPage)
+        perPage: Int = 15,
+    ) = repository.searchVideos(query, orientation, size, locale, page, perPage)
+
 }
