@@ -23,7 +23,7 @@ class HomeScreenViewModel @Inject constructor(
     trendsUseCase: TrendsUseCase,
 ) : ViewModel() {
 
-    val state = trendsUseCase.getTrendsPhotos(perPage = 50)
+    val state = trendsUseCase.getTrendsPhotos()
         .map {
             StateHomeScreen(
                 content = it.content,

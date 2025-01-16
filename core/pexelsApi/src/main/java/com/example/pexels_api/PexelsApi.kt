@@ -14,6 +14,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.create
 import retrofit2.http.GET
+import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -31,6 +32,7 @@ interface PexelsApi {
         @Query("per_page") @IntRange(from = 15, to = 80) perPage: Int = 15,
     ): Result<PhotoResultDto>
 
+    @Headers("Authorization: rIgP7NJA2PZfQ8ObNWgbfiJeshAX4ONo3auVQ8oZaFWVR2Cu22WrFA6v")
     @GET("v1/curated")
     suspend fun getPopularPhotos(
         @Query("page") @IntRange(from = 1) page: Int = 1,
@@ -89,14 +91,14 @@ private fun retrofit(
 
     val modifiedOkHttpClient =
         (okHttpClient?.newBuilder() ?: OkHttpClient.Builder())
-            .addInterceptor(PexelsApiKeyInterceptor(apiKey))
+           // .addInterceptor(PexelsApiKeyInterceptor(apiKey))
             .build()
 
     return Retrofit.Builder()
         .baseUrl(baseUrl)
+        .client(modifiedOkHttpClient)
         .addConverterFactory(jsonConverterFactory)
         .addCallAdapterFactory(ResultCallAdapterFactory.create())
-        .client(modifiedOkHttpClient)
         .build()
 
 }
