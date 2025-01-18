@@ -1,5 +1,6 @@
 package com.example.data.repisitory
 
+import com.example.common.utils.logD
 import com.example.data.mapper.toDomain
 import com.example.domain.ContentRepository
 import com.example.domain.models.ResultContent
@@ -11,8 +12,6 @@ import kotlinx.coroutines.flow.callbackFlow
 
 class ContentRepositoryImpl @Inject constructor(
     private val pexelsApi: PexelsApi,
-    // private val firebaseServises: FirebaseServises,
-    //private val database: Database
 ) : ContentRepository {
 
     override fun searchPhotos(
@@ -23,13 +22,13 @@ class ContentRepositoryImpl @Inject constructor(
         locale: String?,
         page: Int,
         perPage: Int,
-    ): Flow<Result<ResultContent>> = callbackFlow {
+    ): Flow<ResultContent> = callbackFlow {
         pexelsApi.searchPhotos(query, orientation, size, color, locale, page, perPage)
             .onSuccess { dto ->
-                trySend(Result.success(dto.toDomain()))
+                trySend(dto.toDomain())
             }
             .onFailure {
-                trySend(Result.failure(it))
+                trySend(throw it)
             }
         awaitClose()
     }
@@ -37,13 +36,15 @@ class ContentRepositoryImpl @Inject constructor(
     override fun getPopularPhotos(
         page: Int,
         perPage: Int,
-    ): Flow<Result<ResultContent>> = callbackFlow {
+    ): Flow<ResultContent> = callbackFlow {
+        logD(this@ContentRepositoryImpl, "getPopularPhotos : Start")
         pexelsApi.getPopularPhotos(page, perPage)
             .onSuccess { dto ->
-                trySend(Result.success(dto.toDomain()))
+                logD(this@ContentRepositoryImpl, dto.toString())
+                trySend(dto.toDomain())
             }
             .onFailure {
-                trySend(Result.failure(it))
+                trySend(throw RuntimeException(it))
             }
         awaitClose()
     }
@@ -56,14 +57,14 @@ class ContentRepositoryImpl @Inject constructor(
         locale: String?,
         page: Int,
         perPage: Int,
-    ): Flow<Result<ResultContent>> = callbackFlow {
-        pexelsApi.searchVideos(query, orientation, size, locale, page)
-            .onSuccess { dto ->
-                trySend(Result.success(dto.toDomain()))
-            }
-            .onFailure {
-                trySend(Result.failure(it))
-            }
+    ): Flow<ResultContent> = callbackFlow {
+       pexelsApi.searchVideos(query, orientation, size, locale, page)
+           .onSuccess { dto ->
+               trySend(dto.toDomain())
+           }
+           .onFailure {
+               trySend(throw it)
+           }
         awaitClose()
     }
 
@@ -74,13 +75,15 @@ class ContentRepositoryImpl @Inject constructor(
         maxDuration: Int?,
         page: Int,
         perPage: Int,
-    ): Flow<Result<ResultContent>> = callbackFlow {
+    ): Flow<ResultContent> = callbackFlow {
         pexelsApi.getPopularVideos(minWidth, minHeight, minDuration, maxDuration, page, perPage)
             .onSuccess { dto ->
-                trySend(Result.success(dto.toDomain()))
+                logD(this@ContentRepositoryImpl, dto.toString())
+
+                trySend(dto.toDomain())
             }
             .onFailure {
-                trySend(Result.failure(it))
+                trySend(throw it)
             }
         awaitClose()
     }

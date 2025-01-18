@@ -4,7 +4,7 @@ import com.example.domain.models.ResultContent
 import kotlinx.coroutines.flow.Flow
 
 interface ContentRepository {
-     fun searchPhotos(
+    fun searchPhotos(
         query: String,
         orientation: String? = null,
         size: String? = null,
@@ -12,33 +12,33 @@ interface ContentRepository {
         locale: String? = null,
         page: Int = 1,
         perPage: Int = 15,
-    ): Flow<Result<ResultContent>>
+    ): Flow<ResultContent>
 
-     fun getPopularPhotos(
+    fun getPopularPhotos(
         page: Int = 1,
         perPage: Int = 15,
-    ): Flow<Result<ResultContent>>
+    ): Flow<ResultContent>
 
 
-     fun searchVideos(
+    fun searchVideos(
         query: String,
         orientation: String? = null,
         size: String? = null,
         locale: String? = null,
         page: Int = 1,
         perPage: Int = 15,
-    ): Flow<Result<ResultContent>>
+    ): Flow<ResultContent>
 
-     fun getPopularVideos(
+    fun getPopularVideos(
         minWidth: Int? = null,
         minHeight: Int? = null,
         minDuration: Int? = null,
         maxDuration: Int? = null,
         page: Int = 1,
         perPage: Int = 15,
-    ): Flow<Result<ResultContent>>
+    ): Flow<ResultContent>
 
-     //fun likeResource(id: Int): Flow<Boolean>
-     //fun saveResource(id: Int)
+    //fun likeResource(id: Int): Flow<Boolean>
+    //fun saveResource(id: Int)
 
 }

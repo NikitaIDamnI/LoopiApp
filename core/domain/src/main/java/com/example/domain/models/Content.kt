@@ -3,7 +3,9 @@ package com.example.domain.models
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed class Content {
+sealed class Content(
+    val idContent: Int
+) {
     data class Photo(
         val id: Int,
         val width: Int,
@@ -11,12 +13,13 @@ sealed class Content {
         val url: String,
         val photographer: String,
         val photographerUrl: String,
-        val photographerId: Int,
-        val avgColor: String,
+        val photographerId: Long,
+        val avgColor: Int,
         val src: Src,
         val liked: Boolean,
         val alt: String,
-    ): Content()
+
+    ): Content(idContent = id)
 
     @Serializable
     data class Video(
@@ -31,12 +34,8 @@ sealed class Content {
         val user: User,
         val videoFiles: List<VideoFile>,
         val videoPictures: List<VideoPicture>,
-    ): Content()
-
+    ): Content(idContent = id)
 }
-
-
-
 
 @Serializable
 data class VideoFile(
@@ -45,7 +44,7 @@ data class VideoFile(
     val fileType: String,
     val width: Int,
     val height: Int,
-    val fps: Double,
+    val fps: Float,
     val link: String,
 )
 

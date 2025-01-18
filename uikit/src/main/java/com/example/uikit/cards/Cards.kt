@@ -2,18 +2,19 @@ package com.example.uikit.cards
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreHoriz
+import androidx.compose.material.icons.filled.SmartDisplay
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.icons.outlined.Lock
@@ -40,10 +41,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.AsyncImage
 import com.example.domain.models.Content
 import com.example.domain.models.Registration
 import com.example.uikit.R
@@ -51,6 +53,7 @@ import com.example.uikit.loginUiKit.LoggingBottoms
 import com.example.uikit.loginUiKit.LoggingTextField
 import com.example.uikit.theme.ColorMainGreen
 import com.example.uikit.theme.MontserratRegular
+
 
 @Composable
 fun RegistrationCard(
@@ -166,40 +169,110 @@ fun RegistrationCard(
 @Composable
 fun ContentCard(
     modifier: Modifier = Modifier,
-    photo: Content? = null,
-    onClickContent: (String) -> Unit,
+    content: Content,
+    onClickContent: (Content) -> Unit,
     onSetting: () -> Unit,
-    heightPhoto: Dp = 300.dp,
-
-    ) {
-    val width = 200.dp
-    Column(modifier = modifier.width(width)) {
-        Card {
-            Image(
-                modifier = Modifier
-                    .width(width)
-                    .height(heightPhoto)
-                    .clickable(onClick = { onClickContent("") })
-                    .clip(CardDefaults.shape),
-                painter = painterResource(R.drawable.auth_background),
-                contentScale = ContentScale.Crop,
-                contentDescription = null
+) {
+    when (val content = content) {
+        is Content.Photo -> {
+            CardPhoto(
+                content = content,
+                onClickContent = onClickContent
             )
         }
 
-        Row {
-            Spacer(modifier = Modifier.weight(1f))
-            Icon(
-                modifier = Modifier.clickable(
-                    onClick = onSetting,
-                    indication = null,
-                    interactionSource = remember { MutableInteractionSource() }),
-                imageVector = Icons.Default.MoreHoriz,
-                contentDescription = "more",
+        is Content.Video -> {
+            CardVideo(
+                content = content,
+                onClickContent = onClickContent
             )
         }
     }
 
+
+}
+
+@Composable
+private fun CardPhoto(
+    modifier: Modifier = Modifier,
+    content: Content.Photo,
+
+    onClickContent: (Content) -> Unit,
+) {
+    Box(
+        modifier = modifier
+            .clip(CardDefaults.shape)
+            .background(Color(content.avgColor))
+    ) {
+        AsyncImage(
+            model = content.src.original,
+            contentDescription = null,
+            modifier = Modifier
+
+                .clickable(onClick = { onClickContent(content) }),
+            contentScale = ContentScale.Crop
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomStart)
+                .background(Color.Transparent.copy(0.2f))
+        ) {
+            Text(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 10.dp),
+                text = content.photographer,
+                fontSize = 12.sp,
+                color = Color.White,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}
+
+@Composable
+private fun CardVideo(
+    modifier: Modifier = Modifier,
+    content: Content.Video,
+
+    onClickContent: (Content) -> Unit,
+) {
+    Box(modifier = modifier.clip(CardDefaults.shape)) {
+        AsyncImage(
+            model = content.image,
+            contentDescription = null,
+            modifier = Modifier
+                .clickable(onClick = { onClickContent(content) }),
+            contentScale = ContentScale.Crop
+        )
+        Icon(
+            modifier = Modifier
+                .align(Alignment.TopStart)
+                .padding(10.dp),
+            imageVector = Icons.Default.SmartDisplay,
+            contentDescription = "visibility",
+            tint = Color.White
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .align(Alignment.BottomStart)
+                .background(Color.Transparent.copy(0.2f))
+        ) {
+            Text(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = 10.dp),
+                text = content.user.name,
+                fontSize = 12.sp,
+                color = Color.White,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
 }
 
 @Preview

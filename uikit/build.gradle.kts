@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.material)
     implementation (libs.androidx.material.icons)
 
+    //Aspecto
+    api(libs.aspecto.android)
 
     //UI
     api(libs.androidx.ui.tooling.preview)
@@ -57,6 +59,11 @@ dependencies {
     //Compose
     api(libs.androidx.activity.compose)
     api(platform(libs.androidx.compose.bom))
+
+  
+    //Coil
+    implementation(libs.coil.core)
+    implementation(libs.coil.compose)
 
 
     //Test

@@ -47,8 +47,16 @@ dependencies {
 
     //Hilt
     implementation(libs.dagger.hilt.android)
+    implementation(libs.dagger.hilt.navigation.compose)
     kapt(libs.dagger.hilt.compiler)
 
+    implementation(libs.androidx.foundation.layout)
+
+    //Coil
+    implementation(libs.coil.compose)
+
+
+    //Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -59,5 +67,6 @@ dependencies {
     implementation(project(":core:di"))
     implementation(project(":core:domain"))
     implementation(project(":uikit"))
+    implementation(project(":core:common"))
 
 }

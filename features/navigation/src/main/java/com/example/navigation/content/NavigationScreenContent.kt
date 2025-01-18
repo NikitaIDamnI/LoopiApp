@@ -1,8 +1,10 @@
 package com.example.navigation.content
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -52,7 +54,7 @@ private fun NavigationScreenContent(
     onNavigation: (Screen) -> Unit,
 ) {
 
-    var currentRoute = remember { mutableStateOf<String>(NavigationItem.Home.route)}
+    var currentRoute = remember { mutableStateOf<String>(NavigationItem.Home.route) }
 
     Scaffold(
         modifier = modifier,
@@ -65,8 +67,11 @@ private fun NavigationScreenContent(
             )
         }
     ) { innerPadding ->
-        Box (modifier = Modifier.padding(innerPadding)){
-            innerPadding
+        Box(
+            modifier = Modifier
+                .padding(innerPadding)
+                .background(MaterialTheme.colorScheme.background)
+        ) {
             NavigationScreenGraph(
                 navController = navController,
                 homeScreen = homeScreen,
