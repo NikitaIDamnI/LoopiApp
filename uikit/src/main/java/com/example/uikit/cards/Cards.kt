@@ -8,6 +8,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -25,6 +26,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -47,8 +49,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.domain.models.Content
+import com.example.domain.models.Content.Video.Companion.getVideo
 import com.example.domain.models.Registration
+import com.example.domain.models.VideoType
 import com.example.uikit.R
+import com.example.uikit.exoPlayer.VideoPlayer
 import com.example.uikit.loginUiKit.LoggingBottoms
 import com.example.uikit.loginUiKit.LoggingTextField
 import com.example.uikit.theme.ColorMainGreen
@@ -171,11 +176,14 @@ fun ContentCard(
     modifier: Modifier = Modifier,
     content: Content,
     onClickContent: (Content) -> Unit,
-    onSetting: () -> Unit,
-) {
+    currentlyPlayingVideoId: State<Int?>,
+    onPlayVideo: (Int) -> Unit,
+    onStopVideo: () -> Unit,
+    ) {
     when (val content = content) {
         is Content.Photo -> {
             CardPhoto(
+                modifier.fillMaxSize(),
                 content = content,
                 onClickContent = onClickContent
             )
@@ -183,8 +191,12 @@ fun ContentCard(
 
         is Content.Video -> {
             CardVideo(
+                modifier.fillMaxSize(),
                 content = content,
-                onClickContent = onClickContent
+                onClickContent = onClickContent,
+                currentlyPlayingVideoId = currentlyPlayingVideoId,
+                onPlayVideo = onPlayVideo,
+                onStopVideo = onStopVideo
             )
         }
     }
@@ -236,24 +248,32 @@ private fun CardPhoto(
 private fun CardVideo(
     modifier: Modifier = Modifier,
     content: Content.Video,
-
+    onPlayVideo: (Int) -> Unit,
+    onStopVideo: () -> Unit,
+    currentlyPlayingVideoId: State<Int?>,
     onClickContent: (Content) -> Unit,
 ) {
+    val video = content.getVideo(VideoType.HD)
+    val isPlaying =
+        currentlyPlayingVideoId.value == content.idContent // Проверяем, играет ли это видео
+
     Box(modifier = modifier.clip(CardDefaults.shape)) {
-        AsyncImage(
-            model = content.image,
-            contentDescription = null,
-            modifier = Modifier
-                .clickable(onClick = { onClickContent(content) }),
-            contentScale = ContentScale.Crop
+        VideoPlayer(
+            videoUrl = video.link,
+            placeholderUrl = content.image,
+            modifier = Modifier.fillMaxSize(),
+            isPlaying = isPlaying
         )
         Icon(
             modifier = Modifier
                 .align(Alignment.TopStart)
-                .padding(10.dp),
+                .padding(10.dp)
+                .clickable {
+                    if (isPlaying) { onStopVideo() } else { onPlayVideo(content.idContent) }
+                }, // Нажатие запускает видео
             imageVector = Icons.Default.SmartDisplay,
-            contentDescription = "visibility",
-            tint = Color.White
+            contentDescription = "Play Video",
+            tint = if (isPlaying) Color.Green else Color.White
         )
         Row(
             modifier = Modifier
@@ -283,3 +303,4 @@ fun Preview() {
         onGuestRequest = {}
     )
 }
+

@@ -6,10 +6,12 @@ import kotlinx.coroutines.flow.merge
 
 private const val REGEX_PAGE = "[?&]page=(\\d+)"
 
+
 fun logD(caller: Any, message: String) {
     val tag = caller::class.simpleName ?: "UnknownClass"
     Log.d(tag, message)
 }
+
 
 fun String?. parseNextPage(): Int {
     if (this.isNullOrBlank()) return -1
@@ -17,10 +19,10 @@ fun String?. parseNextPage(): Int {
     val regex = Regex(REGEX_PAGE)
     val matchResult = regex.find(this)
 
-    // Извлекаем значение и преобразуем в Int
     return matchResult?.groups?.get(1)?.value?.toIntOrNull() ?: -1
 }
 
 fun <T> Flow<T>.mergeWith(another: Flow<T>): Flow<T>{
     return merge(this,another)
 }
+

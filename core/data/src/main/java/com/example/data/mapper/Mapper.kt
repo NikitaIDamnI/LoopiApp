@@ -23,7 +23,7 @@ fun PhotoResultDto.toDomain(): ResultContent = ResultContent(
     nextPage = nextPage
 )
 
-fun PhotoDto.toDomain(page: Int, nextPage: String?): Photo = Photo(
+fun PhotoDto.toDomain(): Photo = Photo(
     id = id,
     width = width ?: 0,
     height = height ?: 0,
@@ -35,8 +35,6 @@ fun PhotoDto.toDomain(page: Int, nextPage: String?): Photo = Photo(
     src = src?.toDomain() ?: Src(),
     liked = liked,
     alt = alt ?: "",
-
-
     )
 
 fun SrcDto.toDomain(): Src = Src(
@@ -53,11 +51,11 @@ fun SrcDto.toDomain(): Src = Src(
 fun VideoResultDto.toDomain(): ResultContent = ResultContent(
     page = page,
     perPage = perPage,
-    content = videos.map { it.toDomain(page = page, nextPage = nextPage ?: "") },
+    content = videos.map { it.toDomain() },
     nextPage = nextPage
 )
 
-fun VideoDto.toDomain(page: Int, nextPage: String?): Video = Video(
+fun VideoDto.toDomain(): Video = Video(
     id = id,
     width = width,
     height = height,
@@ -69,7 +67,6 @@ fun VideoDto.toDomain(page: Int, nextPage: String?): Video = Video(
     user = user.toDomain(),
     videoFiles = videoFiles.map { it.toDomain() },
     videoPictures = videoPictures.map { it.toDomain() },
-
     )
 
 

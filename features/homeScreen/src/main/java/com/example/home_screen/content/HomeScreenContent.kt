@@ -40,7 +40,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.domain.models.Content
 import com.example.home_screen.content.models.Tabs
 import com.example.home_screen.content.uikit.AspectoLazyColum
-import com.example.home_screen.content.uikit.DynamicColumnGrid
 
 
 import com.example.uikit.theme.InactiveColor
@@ -209,7 +208,6 @@ private fun rememberNestedScrollConnection(
         }
     }
 }
-
 
 
 
