@@ -74,16 +74,16 @@ fun PexelsApi(
     baseUrl: String,
     apiKey: String,
     okHttpClient: OkHttpClient? = null,
-    json: Json = Json
+    json: Json = Json,
 ): PexelsApi {
-    return retrofit(baseUrl, apiKey, okHttpClient,json).create()
+    return retrofit(baseUrl, apiKey, okHttpClient, json).create()
 }
 
 private fun retrofit(
     baseUrl: String,
     apiKey: String,
     okHttpClient: OkHttpClient?,
-    json: Json = Json
+    json: Json = Json,
 ): Retrofit {
     val jsonConverterFactory = json.asConverterFactory("application/json".toMediaType())
 
@@ -94,9 +94,9 @@ private fun retrofit(
 
     return Retrofit.Builder()
         .baseUrl(baseUrl)
+        .client(modifiedOkHttpClient)
         .addConverterFactory(jsonConverterFactory)
         .addCallAdapterFactory(ResultCallAdapterFactory.create())
-        .client(modifiedOkHttpClient)
         .build()
 
 }

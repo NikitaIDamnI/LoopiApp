@@ -19,33 +19,33 @@ import com.example.pexels_api.models.VideoResultDto
 fun PhotoResultDto.toDomain(): ResultContent = ResultContent(
     page = page,
     perPage = perPage,
-    content = photos.map { it.toDomain() },
+    content = photos.map { it.toDomain(page = page, nextPage = nextPage) },
     nextPage = nextPage
 )
 
 fun PhotoDto.toDomain(): Photo = Photo(
     id = id,
-    width = width?:0,
-    height = height?:0,
+    width = width ?: 0,
+    height = height ?: 0,
     url = url ?: "",
     photographer = photographer ?: "",
-    photographerUrl = photographerUrl?: "",
-    photographerId = photographerId?: -1L,
-    avgColor = avgColor?: "",
+    photographerUrl = photographerUrl ?: "",
+    photographerId = photographerId ?: -1L,
+    avgColor = avgColor?.toAndroidColor() ?: 0,
     src = src?.toDomain() ?: Src(),
-    liked = liked ,
-    alt = alt ?: ""
-)
+    liked = liked,
+    alt = alt ?: "",
+    )
 
 fun SrcDto.toDomain(): Src = Src(
-    original = original?: "",
-    large2x = large2x?: "",
-    large = large?: "",
-    small = small?: "",
-    portrait = portrait?: "",
-    landscape = landscape?: "",
-    tiny = tiny?: "",
-    medium = medium?: ""
+    original = original ?: "",
+    large2x = large2x ?: "",
+    large = large ?: "",
+    small = small ?: "",
+    portrait = portrait ?: "",
+    landscape = landscape ?: "",
+    tiny = tiny ?: "",
+    medium = medium ?: ""
 )
 
 fun VideoResultDto.toDomain(): ResultContent = ResultContent(
@@ -67,7 +67,7 @@ fun VideoDto.toDomain(): Video = Video(
     user = user.toDomain(),
     videoFiles = videoFiles.map { it.toDomain() },
     videoPictures = videoPictures.map { it.toDomain() },
-)
+    )
 
 
 fun UserDto.toDomain(): User = User(
@@ -80,9 +80,9 @@ fun VideoFileDto.toDomain(): VideoFile = VideoFile(
     id = id,
     quality = quality,
     fileType = fileType,
-    width = width,
-    height = height,
-    fps = fps,
+    width = width ?: 1000,
+    height = height ?: 1000,
+    fps = fps ?: 25.0f,
     link = link,
 )
 
@@ -91,3 +91,9 @@ fun VideoPictureDto.toDomain(): VideoPicture = VideoPicture(
     picture = picture,
     nr = nr
 )
+
+fun String.toAndroidColor(): Int {
+    return android.graphics.Color.parseColor(this)
+}
+
+

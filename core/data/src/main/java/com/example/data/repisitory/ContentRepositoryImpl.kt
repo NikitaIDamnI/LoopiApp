@@ -22,13 +22,13 @@ class ContentRepositoryImpl @Inject constructor(
         locale: String?,
         page: Int,
         perPage: Int,
-    ): Flow<Result<ResultContent>> = callbackFlow {
+    ): Flow<ResultContent> = callbackFlow {
         pexelsApi.searchPhotos(query, orientation, size, color, locale, page, perPage)
             .onSuccess { dto ->
-                trySend(Result.success(dto.toDomain()))
+                trySend(dto.toDomain())
             }
             .onFailure {
-                trySend(Result.failure(it))
+                trySend(throw it)
             }
         awaitClose()
     }
@@ -57,14 +57,14 @@ class ContentRepositoryImpl @Inject constructor(
         locale: String?,
         page: Int,
         perPage: Int,
-    ): Flow<Result<ResultContent>> = callbackFlow {
+    ): Flow<ResultContent> = callbackFlow {
        pexelsApi.searchVideos(query, orientation, size, locale, page)
-            .onSuccess { dto ->
-                trySend(Result.success(dto.toDomain()))
-            }
-            .onFailure {
-                trySend(Result.failure(it))
-            }
+           .onSuccess { dto ->
+               trySend(dto.toDomain())
+           }
+           .onFailure {
+               trySend(throw it)
+           }
         awaitClose()
     }
 
@@ -75,17 +75,18 @@ class ContentRepositoryImpl @Inject constructor(
         maxDuration: Int?,
         page: Int,
         perPage: Int,
-    ): Flow<Result<ResultContent>> = callbackFlow {
+    ): Flow<ResultContent> = callbackFlow {
         pexelsApi.getPopularVideos(minWidth, minHeight, minDuration, maxDuration, page, perPage)
             .onSuccess { dto ->
                 logD(this@ContentRepositoryImpl, dto.toString())
 
-                trySend(Result.success(dto.toDomain()))
+                trySend(dto.toDomain())
             }
             .onFailure {
-                trySend(Result.failure(it))
+                trySend(throw it)
             }
         awaitClose()
     }
 
 }
+

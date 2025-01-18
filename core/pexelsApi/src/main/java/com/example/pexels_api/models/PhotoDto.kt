@@ -15,7 +15,7 @@ import kotlinx.serialization.Serializable
     val photos: List<PhotoDto>,
     @SerialName("next_page")
     val nextPage: String?,
-
+    @SerialName("prev_page") val prevPage: String? = ""
 )
 
 @Serializable
