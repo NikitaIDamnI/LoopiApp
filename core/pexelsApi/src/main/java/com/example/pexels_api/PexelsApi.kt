@@ -14,7 +14,6 @@ import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.create
 import retrofit2.http.GET
-import retrofit2.http.Headers
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -32,7 +31,6 @@ interface PexelsApi {
         @Query("per_page") @IntRange(from = 15, to = 80) perPage: Int = 15,
     ): Result<PhotoResultDto>
 
-    @Headers("Authorization: rIgP7NJA2PZfQ8ObNWgbfiJeshAX4ONo3auVQ8oZaFWVR2Cu22WrFA6v")
     @GET("v1/curated")
     suspend fun getPopularPhotos(
         @Query("page") @IntRange(from = 1) page: Int = 1,
@@ -76,22 +74,22 @@ fun PexelsApi(
     baseUrl: String,
     apiKey: String,
     okHttpClient: OkHttpClient? = null,
-    json: Json = Json
+    json: Json = Json,
 ): PexelsApi {
-    return retrofit(baseUrl, apiKey, okHttpClient,json).create()
+    return retrofit(baseUrl, apiKey, okHttpClient, json).create()
 }
 
 private fun retrofit(
     baseUrl: String,
     apiKey: String,
     okHttpClient: OkHttpClient?,
-    json: Json = Json
+    json: Json = Json,
 ): Retrofit {
     val jsonConverterFactory = json.asConverterFactory("application/json".toMediaType())
 
     val modifiedOkHttpClient =
         (okHttpClient?.newBuilder() ?: OkHttpClient.Builder())
-           // .addInterceptor(PexelsApiKeyInterceptor(apiKey))
+            .addInterceptor(PexelsApiKeyInterceptor(apiKey))
             .build()
 
     return Retrofit.Builder()

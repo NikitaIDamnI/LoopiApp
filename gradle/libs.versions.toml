@@ -1,6 +1,8 @@
 [versions]
 agp = "8.8.0"
+aspectoAndroid = "1.0.0"
 converterMoshi = "2.9.0"
+foundationLayout = "1.8.0-alpha08"
 javax = "1"
 jsoup = "1.18.1"
 kotlin = "2.0.21"
@@ -56,6 +58,8 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 
 #Material
+androidx-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "foundationLayout" }
+aspecto-android = { module = "com.vipulasri.aspecto:aspecto-android", version.ref = "aspectoAndroid" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-material3-adaptive-navigation-suite = { module = "androidx.compose.material3:material3-adaptive-navigation-suite", version.ref = "material3AdaptiveNavigationSuiteVersion" }

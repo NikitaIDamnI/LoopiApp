@@ -48,6 +48,8 @@ dependencies {
     implementation(libs.material)
     implementation (libs.androidx.material.icons)
 
+    //Aspecto
+    api(libs.aspecto.android)
 
     //UI
     api(libs.androidx.ui.tooling.preview)
