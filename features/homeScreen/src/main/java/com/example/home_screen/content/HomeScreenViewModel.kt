@@ -9,23 +9,27 @@ import com.example.domain.models.StateLoading
 import com.example.domain.useCases.TrendsUseCase
 import com.example.home_screen.content.models.StateHomeScreen
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import javax.inject.Inject
+import kotlin.collections.toSet
 
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val trendsUseCase: TrendsUseCase,
 ) : ViewModel() {
 
-    private val trendsContent = trendsUseCase.getTrendsContent()
+    private val trendsContent = trendsUseCase()
     private val eventLoadNextContent: MutableSharedFlow<StateHomeScreen> = MutableSharedFlow()
 
     private val mutex = Mutex()
@@ -33,8 +37,9 @@ class HomeScreenViewModel @Inject constructor(
 
     val state = trendsContent
         .map {
+            val shuffledContent = it.content.shuffled().toSet()
             StateHomeScreen(
-                content = it.content,
+                content = shuffledContent,
                 stateLoading = StateLoading.Success,
                 page = it.page,
                 nextPage = it.nextPage.parseNextPage()
@@ -44,8 +49,7 @@ class HomeScreenViewModel @Inject constructor(
         .catch {
             emit(
                 StateHomeScreen(
-                    content = emptyList(),
-                    stateLoading = StateLoading.Error(it.message ?: ""),
+                    stateLoading = StateLoading.Error(it.message ?: "")
                 )
             )
         }
@@ -70,7 +74,7 @@ class HomeScreenViewModel @Inject constructor(
                 val currentState = state.value
                 val nextPage = currentState.nextPage
 
-                if (nextPage == -1 || currentState.stateLoading is StateLoading.Loading) {
+                if (nextPage == StateHomeScreen.NULL_PAGE || currentState.stateLoading is StateLoading.Loading) {
                     logD(this@HomeScreenViewModel, "No more pages to load or already loading")
                     return@withLock
                 }
@@ -79,39 +83,46 @@ class HomeScreenViewModel @Inject constructor(
                 eventLoadNextContent.emit(currentState.copy(stateLoading = StateLoading.Loading))
             }
 
-                logD(this@HomeScreenViewModel, "Starting content loading")
-                trendsUseCase.getTrendsContent(page = state.value.nextPage)
-                    .map {
-                        val currentState = state.value
+            logD(this@HomeScreenViewModel, "Starting content loading")
+            trendsUseCase(page = state.value.nextPage)
+                .map {
+                    val currentState = state.value
+                    val shuffledContent = it.content.shuffled().toSet()
+                    val newContent = currentState.content + shuffledContent
+                    currentState.copy(
+                        content = newContent,
+                        stateLoading = StateLoading.Success,
+                        page = it.page,
+                        nextPage = it.nextPage.parseNextPage()
+                    )
+                }
+                .catch { exception ->
+                    val currentState = state.value
+                    eventLoadNextContent.emit(
                         currentState.copy(
-                            content = currentState.content + it.content,
-                            stateLoading = StateLoading.Success,
-                            page = it.page,
-                            nextPage = it.nextPage.parseNextPage()
+                            stateLoading = StateLoading.Error(exception.message ?: "Unknown error")
                         )
-                    }
-                    .catch { exception ->
-                        val currentState = state.value
-                        eventLoadNextContent.emit(
-                            currentState.copy(
-                                stateLoading = StateLoading.Error(exception.message ?: "Unknown error")
-                            )
-                        )
-                        isThrottled = false
+                    )
+                    isThrottled = false
 
-                    }
-                    .collect {
-                        eventLoadNextContent.emit(it)
-                        logD(this@HomeScreenViewModel, "Content loaded successfully")
-                        logD(this@HomeScreenViewModel, "Start delay")
-                        delay(2000)
-                        isThrottled = false
-                        logD(this@HomeScreenViewModel, "Finish")
+                }
+                .collect {
+                    eventLoadNextContent.emit(it)
+                    logD(this@HomeScreenViewModel, "Content loaded successfully")
+                    logD(this@HomeScreenViewModel, "Start delay")
+                    delay(TIME_DELAY)
+                    isThrottled = false
+                    logD(this@HomeScreenViewModel, "Finish")
 
-                    }
+                }
 
         }
 
+    }
+
+
+    companion object {
+        private const val TIME_DELAY = 2000L
     }
 }
 

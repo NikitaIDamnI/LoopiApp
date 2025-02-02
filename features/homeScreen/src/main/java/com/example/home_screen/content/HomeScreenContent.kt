@@ -1,5 +1,6 @@
 package com.example.home_screen.content
 
+
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
@@ -20,6 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,11 +40,11 @@ import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.domain.models.Content
+import com.example.domain.models.StateLoading
 import com.example.home_screen.content.models.Tabs
 import com.example.home_screen.content.uikit.AspectoLazyColum
-
-
 import com.example.uikit.theme.InactiveColor
+import kotlinx.collections.immutable.toImmutableList
 
 
 @Composable
@@ -51,7 +53,7 @@ fun HomeScreen(
     onClickContent: (Content) -> Unit,
     onSetting: () -> Unit,
 ) {
-    HomeScreenContent(
+    HomeScreen(
         modifier = modifier,
         viewModel = hiltViewModel(),
         onClickContent = onClickContent,
@@ -60,13 +62,13 @@ fun HomeScreen(
 }
 
 @Composable
-private fun HomeScreenContent(
+private fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeScreenViewModel,
     onClickContent: (Content) -> Unit,
     onSetting: () -> Unit,
 ) {
-    val state = viewModel.state.collectAsState()
+    val contents = viewModel.state.collectAsState()
     var tabHeight = remember { mutableStateOf(Tabs.MAX_HEIGHT.dp) }
     var selectedTab = remember { mutableStateOf(Tabs.TRENDS) }
 
@@ -85,14 +87,14 @@ private fun HomeScreenContent(
             modifier = Modifier
                 .width(700.dp)
                 .align(Alignment.CenterHorizontally),
-            tabs = Tabs.entries,
-            selectedTab = selectedTab,
+            selectedTab = { selectedTab.value },
             onTabSelected = { selectedTab.value = it },
             tabHeight = tabHeight,
         )
 
         AspectoLazyColum(
-            stateContent = state,
+            contents = { contents.value.content.toImmutableList() },
+            isLoading = { contents.value.stateLoading is StateLoading.Loading },
             onClickContent = onClickContent,
             onSettingContent = onSetting,
             onLoadNextContent = viewModel::loadNextContent
@@ -105,14 +107,12 @@ private fun HomeScreenContent(
 @Composable
 private fun TabRowWithTabs(
     modifier: Modifier = Modifier,
-    tabs: List<Tabs>,
-    selectedTab: State<Tabs>,
+    selectedTab: () -> Tabs ,
     onTabSelected: (Tabs) -> Unit,
     tabHeight: State<Dp>,
 ) {
-    val selectedTab = selectedTab.value
-    val isClickable = tabHeight.value == Tabs.MAX_HEIGHT.dp
 
+    val selectedTab = selectedTab()
 
     TabRow(
         modifier = modifier
@@ -121,6 +121,7 @@ private fun TabRowWithTabs(
         contentColor = MaterialTheme.colorScheme.onBackground,
         containerColor = MaterialTheme.colorScheme.background,
         indicator = { tabPositions ->
+            // Если индикатор зависит от выбранной вкладки, то его можно оставить здесь
             tabPositions.forEachIndexed { index, tabPosition ->
                 TabRowDefaults.PrimaryIndicator(
                     modifier = Modifier
@@ -133,24 +134,40 @@ private fun TabRowWithTabs(
             }
         },
     ) {
-        tabs.forEachIndexed { index, tab ->
-            Tab(
-                selected = selectedTab.index == index,
-                onClick = { onTabSelected(tab) },
-                selectedContentColor = Color.Black,
-                unselectedContentColor = InactiveColor,
-                interactionSource = MutableInteractionSource(),
-                enabled = isClickable
-            ) {
-                Text(
-                    text = tab.nameTab,
-                    fontSize = 18.sp,
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
+        // Выносим логику отрисовки табов в отдельный composable.
+        TabsContent(
+            selectedTab = selectedTab(),
+            isClickable = { tab -> tab != selectedTab },
+            onTabSelected = onTabSelected
+        )
+    }
+}
+
+@Composable
+private fun TabsContent(
+    selectedTab: Tabs,
+    isClickable: (Tabs) -> Boolean,
+    onTabSelected: (Tabs) -> Unit
+) {
+    // Здесь предполагается, что Tabs.entries — стабильная коллекция табов.
+    Tabs.entries.forEachIndexed { index, tab ->
+        Tab(
+            selected = selectedTab.index == index,
+            onClick = { onTabSelected(tab) },
+            selectedContentColor = Color.Black,
+            unselectedContentColor = InactiveColor,
+            interactionSource = remember { MutableInteractionSource() },
+            enabled = isClickable(tab)
+        ) {
+            Text(
+                text = tab.nameTab,
+                fontSize = 18.sp,
+                modifier = Modifier.padding(16.dp)
+            )
         }
     }
 }
+
 
 @Composable
 private fun withIndicator(selectedTab: Tabs, index: Int): Dp {
@@ -208,6 +225,7 @@ private fun rememberNestedScrollConnection(
         }
     }
 }
+
 
 
 

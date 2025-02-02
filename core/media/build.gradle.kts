@@ -1,26 +1,20 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.kapt)
 }
 
 android {
-    namespace = "com.example.di"
-    compileSdk = 34
+    namespace = "com.example.media"
+    compileSdk = 35
 
     defaultConfig {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
-
-        val apikey = project.findProperty("PEXELS_API_KEY").toString()
-
-        buildConfigField("String", "PEXELS_API_KEY", "\"$apikey\"")
-
-        buildConfigField("String", "BASE_URL", "\"https://api.pexels.com/\"")
-
     }
 
     buildTypes {
@@ -40,12 +34,12 @@ android {
         jvmTarget = "11"
     }
     buildFeatures {
-        buildConfig = true
+        compose = true
     }
 }
 
 dependencies {
-
+    //Core
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -53,16 +47,30 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    //Hilt
     implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)
-    debugImplementation(libs.okhttp.logging.interceptor)
 
-    implementation(project(":core:pexelsApi"))
-    implementation(project(":core:database"))
-    implementation(project(":core:firebaseServises"))
+    //Exoplayer
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+
+    //UI
+    api(libs.androidx.ui.tooling.preview)
+    api(libs.androidx.material3)
+    api(libs.androidx.ui)
+    api(libs.androidx.ui.graphics)
+    //Compose
+    api(libs.androidx.activity.compose)
+    api(platform(libs.androidx.compose.bom))
+
+
+    //Coil
+    implementation(libs.coil.core)
+    implementation(libs.coil.compose)
+
     implementation(project(":core:domain"))
-    implementation(project(":core:data"))
-    implementation(project(":core:media"))
+    implementation(project(":core:common"))
 
 
 }

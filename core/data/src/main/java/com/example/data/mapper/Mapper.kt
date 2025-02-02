@@ -19,7 +19,7 @@ import com.example.pexels_api.models.VideoResultDto
 fun PhotoResultDto.toDomain(): ResultContent = ResultContent(
     page = page,
     perPage = perPage,
-    content = photos.map { it.toDomain(page = page, nextPage = nextPage) },
+    content = photos.map { it.toDomain() },
     nextPage = nextPage
 )
 

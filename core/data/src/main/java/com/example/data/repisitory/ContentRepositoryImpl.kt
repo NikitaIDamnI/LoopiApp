@@ -2,7 +2,7 @@ package com.example.data.repisitory
 
 import com.example.common.utils.logD
 import com.example.data.mapper.toDomain
-import com.example.domain.ContentRepository
+import com.example.domain.repository.ContentRepository
 import com.example.domain.models.ResultContent
 import com.example.pexels_api.PexelsApi
 import javax.inject.Inject

@@ -18,6 +18,7 @@
             <option value="$PROJECT_DIR$/core/di" />
             <option value="$PROJECT_DIR$/core/domain" />
             <option value="$PROJECT_DIR$/core/firebaseServises" />
+            <option value="$PROJECT_DIR$/core/media" />
             <option value="$PROJECT_DIR$/core/pexelsApi" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/authScreen" />

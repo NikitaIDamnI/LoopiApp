@@ -8,7 +8,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -26,7 +25,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -49,11 +47,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.domain.models.Content
-import com.example.domain.models.Content.Video.Companion.getVideo
 import com.example.domain.models.Registration
-import com.example.domain.models.VideoType
 import com.example.uikit.R
-import com.example.uikit.exoPlayer.VideoPlayer
 import com.example.uikit.loginUiKit.LoggingBottoms
 import com.example.uikit.loginUiKit.LoggingTextField
 import com.example.uikit.theme.ColorMainGreen
@@ -175,11 +170,13 @@ fun RegistrationCard(
 fun ContentCard(
     modifier: Modifier = Modifier,
     content: Content,
+    exoPlayerManager: ExoPlayerManager,
     onClickContent: (Content) -> Unit,
-    currentlyPlayingVideoId: State<Int?>,
-    onPlayVideo: (Int) -> Unit,
-    onStopVideo: () -> Unit,
-    ) {
+    isPlayVideo: (video: String) -> Boolean,
+    isShowVideo: (video: String) -> Boolean,
+    onPlayVideo: (url: String) -> Unit,
+    onPauseVideo: () -> Unit,
+) {
     when (val content = content) {
         is Content.Photo -> {
             CardPhoto(
@@ -193,10 +190,12 @@ fun ContentCard(
             CardVideo(
                 modifier.fillMaxSize(),
                 content = content,
+                exoPlayerManager = exoPlayerManager,
                 onClickContent = onClickContent,
-                currentlyPlayingVideoId = currentlyPlayingVideoId,
+                isShowVideo = isShowVideo,
+                isPlayVideo = isPlayVideo,
                 onPlayVideo = onPlayVideo,
-                onStopVideo = onStopVideo
+                onPauseVideo = onPauseVideo
             )
         }
     }
@@ -208,7 +207,6 @@ fun ContentCard(
 private fun CardPhoto(
     modifier: Modifier = Modifier,
     content: Content.Photo,
-
     onClickContent: (Content) -> Unit,
 ) {
     Box(
@@ -248,32 +246,38 @@ private fun CardPhoto(
 private fun CardVideo(
     modifier: Modifier = Modifier,
     content: Content.Video,
-    onPlayVideo: (Int) -> Unit,
-    onStopVideo: () -> Unit,
-    currentlyPlayingVideoId: State<Int?>,
+    exoPlayerManager: ExoPlayerManager,
+    onPlayVideo: (String) -> Unit,
+    onPauseVideo: () -> Unit,
+    isPlayVideo: (video: String) -> Boolean,
+    isShowVideo: (video: String) -> Boolean,
     onClickContent: (Content) -> Unit,
 ) {
     val video = content.getVideo(VideoType.HD)
-    val isPlaying =
-        currentlyPlayingVideoId.value == content.idContent // Проверяем, играет ли это видео
+    val playVideo = isPlayVideo(video.link)
 
     Box(modifier = modifier.clip(CardDefaults.shape)) {
         VideoPlayer(
-            videoUrl = video.link,
+            exoPlayerManager = exoPlayerManager,
             placeholderUrl = content.image,
+            isPlayVideo = { playVideo },
+            isShowVideo = { isShowVideo(video.link) },
             modifier = Modifier.fillMaxSize(),
-            isPlaying = isPlaying
         )
         Icon(
             modifier = Modifier
                 .align(Alignment.TopStart)
                 .padding(10.dp)
                 .clickable {
-                    if (isPlaying) { onStopVideo() } else { onPlayVideo(content.idContent) }
-                }, // Нажатие запускает видео
+                    if (playVideo) {
+                        onPauseVideo()
+                    } else {
+                        onPlayVideo(video.link)
+                    }
+                },
             imageVector = Icons.Default.SmartDisplay,
             contentDescription = "Play Video",
-            tint = if (isPlaying) Color.Green else Color.White
+            tint = if (isPlayVideo(video.link)) Color.Green else Color.White
         )
         Row(
             modifier = Modifier
@@ -293,6 +297,7 @@ private fun CardVideo(
             )
         }
     }
+
 }
 
 @Preview
@@ -303,4 +308,3 @@ fun Preview() {
         onGuestRequest = {}
     )
 }
-
