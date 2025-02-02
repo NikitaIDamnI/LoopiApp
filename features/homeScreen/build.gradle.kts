@@ -55,6 +55,8 @@ dependencies {
     //Coil
     implementation(libs.coil.compose)
 
+    //Kotlin
+    implementation(libs.kotlinx.collections.immutable)
 
     //Core
     implementation(libs.androidx.core.ktx)

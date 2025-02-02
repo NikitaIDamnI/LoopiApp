@@ -17,7 +17,6 @@ fun String?. parseNextPage(): Int {
     val regex = Regex(REGEX_PAGE)
     val matchResult = regex.find(this)
 
-    // Извлекаем значение и преобразуем в Int
     return matchResult?.groups?.get(1)?.value?.toIntOrNull() ?: -1
 }
 
