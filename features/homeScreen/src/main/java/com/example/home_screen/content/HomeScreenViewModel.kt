@@ -1,29 +1,31 @@
 package com.example.home_screen.content
 
+import androidx.compose.runtime.Stable
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.common.utils.logD
 import com.example.common.utils.mergeWith
 import com.example.common.utils.parseNextPage
-import com.example.domain.models.StateLoading
+import com.example.uikit.models.StateLoading
 import com.example.domain.useCases.TrendsUseCase
 import com.example.home_screen.content.models.StateHomeScreen
+import com.example.uikit.models.ContentUI
+import com.example.uikit.models.toUI
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
+import okhttp3.internal.toImmutableList
 import javax.inject.Inject
-import kotlin.collections.toSet
 
+@Stable
 @HiltViewModel
 class HomeScreenViewModel @Inject constructor(
     private val trendsUseCase: TrendsUseCase,
@@ -37,7 +39,7 @@ class HomeScreenViewModel @Inject constructor(
 
     val state = trendsContent
         .map {
-            val shuffledContent = it.content.shuffled().toSet()
+            val shuffledContent = it.content.shuffled().toUI().toPersistentList()
             StateHomeScreen(
                 content = shuffledContent,
                 stateLoading = StateLoading.Success,
@@ -87,13 +89,14 @@ class HomeScreenViewModel @Inject constructor(
             trendsUseCase(page = state.value.nextPage)
                 .map {
                     val currentState = state.value
-                    val shuffledContent = it.content.shuffled().toSet()
-                    val newContent = currentState.content + shuffledContent
+                    val shuffledContent = it.content.toUI()
+                    val newContent = updateList(currentState.content, shuffledContent).toPersistentList()
                     currentState.copy(
                         content = newContent,
                         stateLoading = StateLoading.Success,
                         page = it.page,
                         nextPage = it.nextPage.parseNextPage()
+
                     )
                 }
                 .catch { exception ->
@@ -118,6 +121,17 @@ class HomeScreenViewModel @Inject constructor(
 
         }
 
+    }
+
+    private fun updateList(
+        oldList: List<ContentUI>,
+        newList: List<ContentUI>,
+    ): List<ContentUI> {
+        val mutableList: MutableList<ContentUI> = mutableListOf<ContentUI>()
+        mutableList.addAll(oldList)
+        mutableList.addAll(newList)
+
+        return mutableList.toImmutableList()
     }
 
 

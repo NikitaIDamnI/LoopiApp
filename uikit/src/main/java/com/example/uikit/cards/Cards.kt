@@ -8,6 +8,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -47,10 +48,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.domain.models.Content
+import com.example.domain.models.Content.Video.Companion.getVideo
 import com.example.domain.models.Registration
+import com.example.domain.models.VideoType
 import com.example.uikit.R
+import com.example.uikit.exoPlayer.ExoPlayerManager
+import com.example.uikit.exoPlayer.VideoPlayer
 import com.example.uikit.loginUiKit.LoggingBottoms
 import com.example.uikit.loginUiKit.LoggingTextField
+import com.example.uikit.models.ContentUI
+import com.example.uikit.models.ContentUI.VideoUI.Companion.getVideo
 import com.example.uikit.theme.ColorMainGreen
 import com.example.uikit.theme.MontserratRegular
 
@@ -169,24 +176,23 @@ fun RegistrationCard(
 @Composable
 fun ContentCard(
     modifier: Modifier = Modifier,
-    content: Content,
+    content: ContentUI,
     exoPlayerManager: ExoPlayerManager,
-    onClickContent: (Content) -> Unit,
+    onClickContent: (ContentUI) -> Unit,
     isPlayVideo: (video: String) -> Boolean,
     isShowVideo: (video: String) -> Boolean,
     onPlayVideo: (url: String) -> Unit,
     onPauseVideo: () -> Unit,
 ) {
     when (val content = content) {
-        is Content.Photo -> {
+        is ContentUI.PhotoUI -> {
             CardPhoto(
                 modifier.fillMaxSize(),
                 content = content,
                 onClickContent = onClickContent
             )
         }
-
-        is Content.Video -> {
+        is ContentUI.VideoUI -> {
             CardVideo(
                 modifier.fillMaxSize(),
                 content = content,
@@ -206,8 +212,8 @@ fun ContentCard(
 @Composable
 private fun CardPhoto(
     modifier: Modifier = Modifier,
-    content: Content.Photo,
-    onClickContent: (Content) -> Unit,
+    content: ContentUI.PhotoUI,
+    onClickContent: (ContentUI) -> Unit,
 ) {
     Box(
         modifier = modifier
@@ -245,13 +251,13 @@ private fun CardPhoto(
 @Composable
 private fun CardVideo(
     modifier: Modifier = Modifier,
-    content: Content.Video,
+    content: ContentUI.VideoUI,
     exoPlayerManager: ExoPlayerManager,
     onPlayVideo: (String) -> Unit,
     onPauseVideo: () -> Unit,
     isPlayVideo: (video: String) -> Boolean,
     isShowVideo: (video: String) -> Boolean,
-    onClickContent: (Content) -> Unit,
+    onClickContent: (ContentUI) -> Unit,
 ) {
     val video = content.getVideo(VideoType.HD)
     val playVideo = isPlayVideo(video.link)

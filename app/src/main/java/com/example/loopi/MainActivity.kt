@@ -4,11 +4,19 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.WindowInsets
-import android.view.WindowInsetsController
+import android.view.WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextAlign
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.example.authscreen.ui.AuthScreenContent
 import com.example.home_screen.content.HomeScreen
@@ -24,7 +32,6 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         installSplashScreen()
-        setStatusBarIconsColor()
         enableEdgeToEdge()
         setContent {
             LoopiTheme {
@@ -40,11 +47,11 @@ class MainActivity : ComponentActivity() {
                                     onSetting = {}
                                 )
                             },
-                            searchScreen = {},
-                            addScreen = {},
-                            profileScreen = {},
-                            notificationsScreen = {},
-                            filterScreen = {},
+                            searchScreen = {FakeScreen(route = "searchScreen", color = Color.Red)},
+                            addScreen = {FakeScreen(route = "addScreen", color = Color.Green)},
+                            profileScreen = {FakeScreen(route = "profileScreen", color = Color.Magenta)},
+                            notificationsScreen = {FakeScreen(route = "notificationsScreen", color = Color.Cyan)},
+                            filterScreen = {FakeScreen(route = "filterScreen", color = Color.Yellow)},
                         )
                     },
                     authScreen = {
@@ -63,21 +70,22 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun setStatusBarIconsColor() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-            val controller = window.insetsController
-            controller?.hide(WindowInsets.Type.statusBars() or WindowInsets.Type.navigationBars())
-            controller?.systemBarsBehavior =
-                WindowInsetsController.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
-        } else {
-            // Альтернативное решение для более старых версий Android
-            window.decorView.systemUiVisibility = (
-                    View.SYSTEM_UI_FLAG_FULLSCREEN
-                            or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                            or View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                    )
+
+    @Composable
+    private fun FakeScreen(modifier: Modifier = Modifier, route: String,color: Color) {
+        Box(
+            modifier.fillMaxSize().background(color)
+        ) {
+            Text(
+                modifier = Modifier.align(Alignment.Center),
+                text = route,
+                textAlign = TextAlign.Center
+            )
+
         }
+
     }
+
 }
 
 

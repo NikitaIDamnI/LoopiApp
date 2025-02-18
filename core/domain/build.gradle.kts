@@ -20,6 +20,8 @@ kotlin {
 dependencies{
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.javax.inject)
+    implementation(libs.kotlinx.collections.immutable)
+
     api(libs.kotlinx.serialization.json)
     api(libs.androidx.annotation)
 

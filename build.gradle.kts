@@ -17,6 +17,24 @@ plugins {
     alias(libs.plugins.baselineprofile) apply false
 }
 
+subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+            freeCompilerArgs.addAll(
+                listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                            project.layout.buildDirectory.get().asFile.absolutePath + "/compose_metrics",
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                            project.layout.buildDirectory.get().asFile.absolutePath + "/compose_metrics"
+                )
+            )
+        }
+    }
+}
+
 allprojects.onEach { project ->
     project.afterEvaluate {
         with(project.plugins) {
