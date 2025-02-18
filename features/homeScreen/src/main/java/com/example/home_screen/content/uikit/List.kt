@@ -11,29 +11,27 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.domain.models.Content
-import com.example.domain.models.Content.Video.Companion.getVideo
 import com.example.domain.models.VideoType
 import com.example.uikit.cards.ContentCard
 import com.example.uikit.exoPlayer.rememberExoPlayerManager
+import com.example.uikit.models.ContentUI
+import com.example.uikit.models.ContentUI.VideoUI.Companion.getVideo
 import com.vipulasri.aspecto.AspectoGrid
-import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.PersistentList
 
 @Composable
 fun AspectoLazyColum(
     modifier: Modifier = Modifier,
-    contents: () -> List<Content>,
+    contents: () -> PersistentList<ContentUI>,
     isLoading: () -> Boolean,
     maxRowHeight: Dp = 450.dp,
-    onClickContent: (Content) -> Unit,
+    onClickContent: (ContentUI) -> Unit,
     onSettingContent: () -> Unit,
     onLoadNextContent: () -> Unit,
 ) {
@@ -58,8 +56,8 @@ fun AspectoLazyColum(
                 key = { it.idContent },
                 aspectRatio = {
                     when (it) {
-                        is Content.Photo -> it.width.toFloat() / it.height.toFloat()
-                        is Content.Video -> {
+                        is ContentUI.PhotoUI -> it.width.toFloat() / it.height.toFloat()
+                        is ContentUI.VideoUI -> {
                             val video = it.getVideo(VideoType.SD)
                             (video.width.toFloat() / video.height.toFloat()).coerceAtMost(16f / 9f)
                         }
@@ -71,7 +69,7 @@ fun AspectoLazyColum(
                     content = item,
                     exoPlayerManager = exoPlayerManager.value,
                     onClickContent = onClickContent,
-                    isPlayVideo = { video -> statePlayer.value.contentUrl == video && statePlayer.value.isPlaying},
+                    isPlayVideo = { video -> statePlayer.value.contentUrl == video && statePlayer.value.isPlaying },
                     isShowVideo = { video -> statePlayer.value.contentUrl == video && statePlayer.value.isShow },
                     onPlayVideo = { url ->
                         exoPlayerManager.value.play(url)

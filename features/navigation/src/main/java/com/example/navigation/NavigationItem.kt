@@ -6,9 +6,11 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import com.example.domain.models.Screen
 import kotlinx.serialization.ExperimentalSerializationApi
+
 
 sealed class NavigationItem(
     val screen: Screen,
@@ -20,29 +22,28 @@ sealed class NavigationItem(
         route = getRoute(Screen.Home),
         title = "Home",
         icon = Icons.Default.Home,
-        screen = Screen.Home
+        screen = Screen.Home,
     )
 
     object Search : NavigationItem(
         route = getRoute(Screen.Search),
         title = "Search",
         icon = Icons.Default.Search,
-        screen = Screen.Search
+        screen = Screen.Search,
     )
 
     object Add : NavigationItem(
         route = getRoute(Screen.AddScreen),
         title = "Add",
         icon = Icons.Default.Add,
-        screen = Screen.AddScreen
-
+        screen = Screen.AddScreen,
     )
 
     object Profile : NavigationItem(
         route = getRoute(Screen.Profile),
         title = "Profile",
         icon = Icons.Default.Person,
-        screen = Screen.Profile
+        screen = Screen.Profile,
 
     )
 
@@ -50,7 +51,7 @@ sealed class NavigationItem(
         route = getRoute(Screen.Notifications),
         title = "Notifications",
         icon = Icons.Default.Notifications,
-        screen = Screen.Notifications
+        screen = Screen.Notifications,
     )
 
 
@@ -68,7 +69,13 @@ sealed class NavigationItem(
         }
 
         fun getNavigationItems(): List<NavigationItem> {
-            return listOf(Home, Search, Add, Notifications,Profile )
+            return listOf(
+                Home,
+                Search,
+                Add,
+                Profile,
+                Notifications
+            )
         }
     }
 }

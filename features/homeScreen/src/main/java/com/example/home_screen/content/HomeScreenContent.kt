@@ -21,10 +21,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -39,18 +39,19 @@ import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.domain.models.Content
-import com.example.domain.models.StateLoading
+import com.example.uikit.models.StateLoading
 import com.example.home_screen.content.models.Tabs
 import com.example.home_screen.content.uikit.AspectoLazyColum
+import com.example.uikit.models.ContentUI
 import com.example.uikit.theme.InactiveColor
-import kotlinx.collections.immutable.toImmutableList
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.haze
 
 
 @Composable
 fun HomeScreen(
     modifier: Modifier = Modifier,
-    onClickContent: (Content) -> Unit,
+    onClickContent: (ContentUI) -> Unit,
     onSetting: () -> Unit,
 ) {
     HomeScreen(
@@ -65,7 +66,7 @@ fun HomeScreen(
 private fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeScreenViewModel,
-    onClickContent: (Content) -> Unit,
+    onClickContent: (ContentUI) -> Unit,
     onSetting: () -> Unit,
 ) {
     val contents = viewModel.state.collectAsState()
@@ -93,7 +94,7 @@ private fun HomeScreen(
         )
 
         AspectoLazyColum(
-            contents = { contents.value.content.toImmutableList() },
+            contents = { contents.value.content },
             isLoading = { contents.value.stateLoading is StateLoading.Loading },
             onClickContent = onClickContent,
             onSettingContent = onSetting,
@@ -107,7 +108,7 @@ private fun HomeScreen(
 @Composable
 private fun TabRowWithTabs(
     modifier: Modifier = Modifier,
-    selectedTab: () -> Tabs ,
+    selectedTab: () -> Tabs,
     onTabSelected: (Tabs) -> Unit,
     tabHeight: State<Dp>,
 ) {
@@ -116,7 +117,7 @@ private fun TabRowWithTabs(
 
     TabRow(
         modifier = modifier
-            .height(tabHeight.value),
+            .height(tabHeight.value ),
         selectedTabIndex = selectedTab.index,
         contentColor = MaterialTheme.colorScheme.onBackground,
         containerColor = MaterialTheme.colorScheme.background,
@@ -147,7 +148,7 @@ private fun TabRowWithTabs(
 private fun TabsContent(
     selectedTab: Tabs,
     isClickable: (Tabs) -> Boolean,
-    onTabSelected: (Tabs) -> Unit
+    onTabSelected: (Tabs) -> Unit,
 ) {
     // Здесь предполагается, что Tabs.entries — стабильная коллекция табов.
     Tabs.entries.forEachIndexed { index, tab ->
@@ -161,8 +162,8 @@ private fun TabsContent(
         ) {
             Text(
                 text = tab.nameTab,
-                fontSize = 18.sp,
-                modifier = Modifier.padding(16.dp)
+                fontSize = 15.sp,
+                modifier = Modifier.padding(top = 40.dp, bottom = 5.dp)
             )
         }
     }
@@ -195,8 +196,8 @@ private fun rememberNestedScrollConnection(
                 val currentHeight = tabHeightState()
 
                 val newHeight = when {
-                    delta > 0 -> min(Tabs.MAX_HEIGHT.dp, currentHeight + ((delta / 5).dp))
-                    delta < 0 -> max(Tabs.MIN_HEIGHT.dp, currentHeight + ((delta / 5).dp))
+                    delta > 0 -> min(Tabs.MAX_HEIGHT.dp, currentHeight + ((delta / 10).dp))
+                    delta < 0 -> max(Tabs.MIN_HEIGHT.dp, currentHeight + ((delta / 10).dp))
                     else -> currentHeight
                 }
 

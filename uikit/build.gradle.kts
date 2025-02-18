@@ -46,7 +46,7 @@ dependencies {
 
     //Material
     implementation(libs.material)
-    implementation (libs.androidx.material.icons)
+    implementation(libs.androidx.material.icons)
 
     //Aspecto
     api(libs.aspecto.android)
@@ -68,6 +68,8 @@ dependencies {
     implementation(libs.coil.core)
     implementation(libs.coil.compose)
 
+    //Kotlin
+    api(libs.kotlinx.collections.immutable)
 
     //Test
     testImplementation(libs.junit)

@@ -1,17 +1,14 @@
 package com.example.home_screen.content.models
 
-import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
-import com.example.domain.models.Content
-import com.example.domain.models.StateLoading
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.ImmutableSet
+import com.example.uikit.models.StateLoading
+import com.example.uikit.models.ContentUI
+import kotlinx.collections.immutable.PersistentList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.persistentSetOf
 
-@Immutable
+@Stable
 data class StateHomeScreen (
-    val content: Set<Content> = emptySet(),
+    val content: PersistentList<ContentUI> = persistentListOf(),
     val page: Int = 1,
     val nextPage: Int = -1,
     val stateLoading: StateLoading = StateLoading.Loading,

@@ -56,6 +56,8 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)
 
+    implementation(libs.haze.jetpack.compose)
+
 
 
     implementation(project(":core:di"))

@@ -39,20 +39,26 @@ class ExoPlayerManager(
                     .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
                     .build()
                 setAudioAttributes(audioAttributes, true)
-                // По умолчанию включаем звук
-                volume = 1f
+
+                volume = 1f // Включаем звук по умолчанию
 
                 addListener(object : Player.Listener {
                     override fun onPlaybackStateChanged(state: Int) {
-                        val isPlaying = state == Player.STATE_READY && playWhenReady
-                        updateState { copy(isPlaying = isPlaying) }
+                        when (state) {
+                            Player.STATE_READY -> {
+                                updateState { copy(isPlaying = true) }
+                            }
+                            Player.STATE_ENDED -> {
+                                updateState { copy(isPlaying = false, isShow = false) } // ✅ Скрываем видео при завершении
+                                logD(this@ExoPlayerManager, "Video ended. isShow = false")
+                            }
+                        }
                     }
 
                     override fun onRenderedFirstFrame() {
                         super.onRenderedFirstFrame()
                         updateState { copy(isShow = true) }
                         logD(this@ExoPlayerManager, "isShow = true")
-
                     }
                 })
             }
@@ -72,39 +78,39 @@ class ExoPlayerManager(
             return
         }
 
-        // Если это тот же контент, который уже загружен, просто возобновляем воспроизведение.
-        if (uri == _state.value.contentUrl) {
-            exoPlayer?.let { player ->
-                player.playWhenReady = true
-                updateState { copy(isPlaying = true) }
-                logD(this@ExoPlayerManager, "Resuming video: $uri")
-            }
-        } else {
-            // Если URI отличается, обновляем состояние и загружаем новый контент.
-            updateState { copy(isShow = false) }
-            exoPlayer?.let { player ->
-                val mediaItem = MediaItem.fromUri(Uri.parse(uri))
-                player.setMediaItem(mediaItem)
-                player.prepare()
-                player.playWhenReady = true
-                player.repeatMode = repeatMode
-                updateState {
-                    copy(
-                        isPlaying = true,
-                        contentUrl = uri
-                    )
+        exoPlayer?.let { player ->
+            when {
+                uri == _state.value.contentUrl -> {
+                    // ✅ Если видео было скрыто, снова показываем
+                    updateState { copy(isShow = true, isPlaying = true) }
+                    player.playWhenReady = true
+                    logD(this@ExoPlayerManager, "Resuming video: $uri")
                 }
-                logD(this@ExoPlayerManager, "Playing new video: $uri")
+                else -> {
+                    // ✅ Загружаем новое видео
+                    updateState { copy(isShow = false) }
+                    val mediaItem = MediaItem.fromUri(Uri.parse(uri))
+                    player.setMediaItem(mediaItem)
+                    player.prepare()
+                    player.playWhenReady = true
+                    player.repeatMode = repeatMode
+                    updateState {
+                        copy(
+                            isPlaying = true,
+                            contentUrl = uri
+                        )
+                    }
+                    logD(this@ExoPlayerManager, "Playing new video: $uri")
+                }
             }
         }
     }
+
     fun pause() {
         if (_state.value.isInitialized && _state.value.isPlaying) {
             exoPlayer?.playWhenReady = false
             exoPlayer?.pause()
-            updateState {
-                copy(isPlaying = false)
-            }
+            updateState { copy(isPlaying = false) }
             logD(this@ExoPlayerManager, "Playback paused. Content: ${_state.value.contentUrl}")
         }
     }
@@ -130,9 +136,10 @@ class ExoPlayerManager(
     }
 
     fun getPlayer(): Player {
-        return exoPlayer ?: throw java.lang.RuntimeException("Player not initialized")
+        return exoPlayer ?: throw RuntimeException("Player not initialized")
     }
 }
+
 
 @Composable
 fun rememberExoPlayerManager(
@@ -156,3 +163,4 @@ data class StateExoPlayerManager(
     val isShow: Boolean = false,
     val contentUrl: String = ""
 )
+

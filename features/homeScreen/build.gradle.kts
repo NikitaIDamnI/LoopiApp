@@ -55,8 +55,8 @@ dependencies {
     //Coil
     implementation(libs.coil.compose)
 
-    //Kotlin
-    implementation(libs.kotlinx.collections.immutable)
+    implementation(libs.haze.jetpack.compose)
+
 
     //Core
     implementation(libs.androidx.core.ktx)
