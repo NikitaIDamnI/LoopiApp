@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.0"
+agp = "8.8.1"
 aspectoAndroid = "1.0.0"
 compiler = "1.5.15"
 converterMoshi = "2.9.0"
@@ -51,9 +51,10 @@ coreSplashscreen = "1.0.1"
 materialIcons = "1.7.6"
 material3AdaptiveNavigationSuiteVersion = "1.4.0-alpha05"
 material3WindowSizeClass = "1.3.1"
-
-
-
+mvikotlinVersion = "3.1.0"
+decomposeVersion = "2.1.2"
+parselize = "2.1.10"
+decomposeDetect = "0.2.0"
 
 [libraries]
 #Core
@@ -102,7 +103,7 @@ retrofit-responseTypeKeeper = { module = "com.squareup.retrofit2:response-type-k
 retrofit-converter-gson = { module = "com.squareup.retrofit2:converter-gson", version.ref = "retrofit" }
 
 
-#Koеlin
+#Kotlin
 kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinx-coroutines" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlin-serialization-json" }
@@ -138,6 +139,12 @@ androidx-compose-foundation = { group = "androidx.compose.foundation", name = "f
 haze-jetpack-compose = { module = "dev.chrisbanes.haze:haze-jetpack-compose", version.ref = "hazeJetpackCompose" }
 aspecto-android = { module = "com.vipulasri.aspecto:aspecto-android", version.ref = "aspectoAndroid" }
 
+#Decompose
+mvikotlin-core = { group = "com.arkivanov.mvikotlin", name = "mvikotlin", version.ref = "mvikotlinVersion" }
+mvikotlin-main = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-main", version.ref = "mvikotlinVersion" }
+mvikotlin-coroutines = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-extensions-coroutines", version.ref = "mvikotlinVersion" }
+decompose-core = { group = "com.arkivanov.decompose", name = "decompose", version.ref = "decomposeVersion" }
+decompose-jetpack = { group = "com.arkivanov.decompose", name = "extensions-compose-jetpack", version.ref = "decomposeVersion" }
 
 #Test
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -155,6 +162,7 @@ androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profi
 
 
 [plugins]
+parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
@@ -168,5 +176,4 @@ androidx-room = { id = "androidx.room", version.ref = "room" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 android-test = { id = "com.android.test", version.ref = "agp" }
 baselineprofile = { id = "androidx.baselineprofile", version.ref = "baselineprofile" }
-
 

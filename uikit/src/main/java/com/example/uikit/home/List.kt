@@ -1,4 +1,4 @@
-package com.example.home_screen.content.uikit
+package com.example.uikit.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -53,7 +53,7 @@ fun AspectoLazyColum(
         ) {
             items(
                 items = contents(),
-                key = { it.idContent },
+                key = { it.idContent},
                 aspectRatio = {
                     when (it) {
                         is ContentUI.PhotoUI -> it.width.toFloat() / it.height.toFloat()

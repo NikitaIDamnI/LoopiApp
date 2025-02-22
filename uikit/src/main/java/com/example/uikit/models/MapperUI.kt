@@ -1,20 +1,14 @@
 package com.example.uikit.models
 
-import androidx.compose.runtime.Immutable
 import com.example.domain.models.*
 import com.example.domain.models.Content
-import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 
 
+fun List<Content>.toUI(): List<ContentUI>  =  this.map { it.toUI() }
 
-fun List<Content>.toUI(): List<ContentUI> {
-    return this.map { it.toUI() }
-}
-fun Set<Content>.toUI(): List<ContentUI> {
-    return this.map { it.toUI() }
-}
+fun Set<Content>.toUI(): Set<ContentUI> = this.map { it.toUI() }.toSet()
+
 
 fun Content.toUI(): ContentUI {
     return when (this) {

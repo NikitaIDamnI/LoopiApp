@@ -1,18 +1,18 @@
 package com.example.uikit.models
 
-import com.example.domain.models.VideoType
-import kotlinx.serialization.Serializable
+import android.os.Parcelable
 import androidx.compose.runtime.Immutable
+import com.example.domain.models.VideoType
 import kotlinx.collections.immutable.PersistentList
+import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 
-@Immutable
-@Serializable
 sealed class ContentUI(
     val idContent: Int,
-) {
+) : Parcelable {
     @Immutable
-    @Serializable
+    @Parcelize
     data class PhotoUI(
         val id: Int,
         val width: Int,
@@ -28,7 +28,7 @@ sealed class ContentUI(
     ) : ContentUI(idContent = id)
 
     @Immutable
-    @Serializable
+    @Parcelize
     data class VideoUI(
         val id: Int,
         val width: Int,
@@ -71,7 +71,7 @@ sealed class ContentUI(
 }
 
 @Immutable
-@Serializable
+@Parcelize
 data class VideoFileUI(
     val id: Int,
     val quality: String,
@@ -80,18 +80,18 @@ data class VideoFileUI(
     val height: Int,
     val fps: Float,
     val link: String,
-)
+): Parcelable
 
 @Immutable
-@Serializable
+@Parcelize
 data class VideoPictureUI(
     val id: Int,
     val picture: String,
     val nr: Int,
-)
+) : Parcelable
 
 @Immutable
-@Serializable
+@Parcelize
 data class SrcUI(
     val original: String = "",
     val large2x: String = "",
@@ -101,10 +101,11 @@ data class SrcUI(
     val portrait: String = "",
     val landscape: String = "",
     val tiny: String = "",
-)
-@Serializable
+) : Parcelable
+
+@Parcelize
 data class UserUI(
     val id: Int,
     val name: String,
     val url: String,
-)
+) : Parcelable
