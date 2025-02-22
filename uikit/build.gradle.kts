@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.parcelize)
 }
 
 android {
@@ -46,11 +47,14 @@ dependencies {
 
     //Material
     implementation(libs.material)
-    implementation (libs.androidx.material.icons)
+    implementation(libs.androidx.material.icons)
 
     //Aspecto
     api(libs.aspecto.android)
 
+    //Exoplayer
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
     //UI
     api(libs.androidx.ui.tooling.preview)
     api(libs.androidx.material3)
@@ -59,12 +63,14 @@ dependencies {
     //Compose
     api(libs.androidx.activity.compose)
     api(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compiler)
 
-  
     //Coil
     implementation(libs.coil.core)
     implementation(libs.coil.compose)
 
+    //Kotlin
+    api(libs.kotlinx.collections.immutable)
 
     //Test
     testImplementation(libs.junit)
@@ -73,5 +79,6 @@ dependencies {
     androidTestImplementation(platform(libs.androidx.compose.bom))
 
     implementation(project(":core:domain"))
+    implementation(project(":core:common"))
 
 }

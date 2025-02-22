@@ -34,6 +34,14 @@ android {
 
 dependencies {
 
+    //mvikotlin
+    api(libs.mvikotlin.core)
+    api(libs.mvikotlin.main)
+    api(libs.mvikotlin.coroutines)
+    //decompose
+    api(libs.decompose.core)
+    api(libs.decompose.jetpack)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

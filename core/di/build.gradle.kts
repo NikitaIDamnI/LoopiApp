@@ -62,5 +62,9 @@ dependencies {
     implementation(project(":core:firebaseServises"))
     implementation(project(":core:domain"))
     implementation(project(":core:data"))
+    implementation(project(":core:media"))
+    implementation(project(":core:common"))
+
+
 
 }

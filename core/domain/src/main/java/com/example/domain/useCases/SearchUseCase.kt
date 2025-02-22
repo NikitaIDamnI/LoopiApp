@@ -1,6 +1,6 @@
 package com.example.domain.useCases
 
-import com.example.domain.ContentRepository
+import com.example.domain.repository.ContentRepository
 import javax.inject.Inject
 
 class SearchUseCase @Inject constructor(

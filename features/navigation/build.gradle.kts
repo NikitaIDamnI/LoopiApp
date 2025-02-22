@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.parcelize)
     alias(libs.plugins.kotlinSerialization)
     alias(libs.plugins.dagger.hilt.android)
     alias(libs.plugins.kapt)
@@ -56,9 +57,13 @@ dependencies {
     implementation(libs.dagger.hilt.android)
     kapt(libs.dagger.hilt.compiler)
 
+    implementation(libs.haze.jetpack.compose)
+
 
 
     implementation(project(":core:di"))
     implementation(project(":core:domain"))
+    implementation(project(":core:common"))
+    implementation(project(":features:homeScreen"))
     implementation(project(":uikit"))
 }

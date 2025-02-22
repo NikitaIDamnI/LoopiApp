@@ -14,7 +14,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.domain.models.Registration
 import com.example.uikit.R
 import com.example.uikit.cards.RegistrationCard
