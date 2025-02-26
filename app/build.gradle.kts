@@ -55,6 +55,8 @@ dependencies {
 
 //Hilt
     implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     kapt(libs.dagger.hilt.compiler)
 
     //Coil

@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="Theme.Loopi.Splash" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher</item>
-
-        <item name="windowSplashScreenBackground">@color/splash_color</item>
-
-        <item name="windowSplashScreenIconBackgroundColor">@color/white</item>
-
-
+        <!-- Подключаем XML с растягиваемым фоном -->
+        <item name="windowSplashScreenBackground">@drawable/background_app</item>
+        <!-- Отключаем анимированную иконку, чтобы картинка занимала весь экран -->
+        <item name="windowSplashScreenAnimatedIcon">@null</item>
         <item name="postSplashScreenTheme">@style/Theme.Loopi</item>
-
     </style>
-
-
 
 </resources>

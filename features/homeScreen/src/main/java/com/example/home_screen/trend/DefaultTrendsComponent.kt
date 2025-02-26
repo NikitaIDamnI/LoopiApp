@@ -37,7 +37,7 @@ class DefaultTrendsComponent @AssistedInject constructor(
         }
         scope.launch{
             model.collect{
-                logD(this@DefaultTrendsComponent, "${it.page}")
+                logD(this@DefaultTrendsComponent, "${it.stateLoading}")
             }
         }
     }

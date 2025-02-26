@@ -38,8 +38,7 @@ compose-rules = "0.4.3"
 jetbrainsKotlinJvm = "2.0.21"
 appcompat = "1.7.0"
 material = "1.12.0"
-androidx-compose-runtime = "1.7.5"
-foundationAndroid = "1.7.5"
+composeVersion = "1.7.8"
 gson = "2.11.0"
 navigationCompose = "2.8.4"
 hiltNavigationCompose = "1.2.0"
@@ -55,6 +54,8 @@ mvikotlinVersion = "3.1.0"
 decomposeVersion = "2.1.2"
 parselize = "2.1.10"
 decomposeDetect = "0.2.0"
+activity = "1.10.0"
+constraintlayout = "2.2.0"
 
 [libraries]
 #Core
@@ -134,12 +135,11 @@ androidx-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-toolin
 androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest" }
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
-androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "androidx-compose-runtime" }
-androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "foundationAndroid" }
+androidx-compose-runtime = { group = "androidx.compose.runtime", name = "runtime", version.ref = "composeVersion" }
+androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation-android", version.ref = "composeVersion" }
 haze-jetpack-compose = { module = "dev.chrisbanes.haze:haze-jetpack-compose", version.ref = "hazeJetpackCompose" }
 aspecto-android = { module = "com.vipulasri.aspecto:aspecto-android", version.ref = "aspectoAndroid" }
 
-#Decompose
 mvikotlin-core = { group = "com.arkivanov.mvikotlin", name = "mvikotlin", version.ref = "mvikotlinVersion" }
 mvikotlin-main = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-main", version.ref = "mvikotlinVersion" }
 mvikotlin-coroutines = { group = "com.arkivanov.mvikotlin", name = "mvikotlin-extensions-coroutines", version.ref = "mvikotlinVersion" }
@@ -157,6 +157,8 @@ androidx-benchmark-macro-junit4 = { group = "androidx.benchmark", name = "benchm
 androidx-annotation = { module = "androidx.annotation:annotation", version.ref = "annotation" }
 gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
 androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
+androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
 
 
 
