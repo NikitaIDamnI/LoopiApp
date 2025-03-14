@@ -1,5 +1,5 @@
 [versions]
-agp = "8.8.1"
+agp = "8.9.0"
 aspectoAndroid = "1.0.0"
 compiler = "1.5.15"
 converterMoshi = "2.9.0"
@@ -7,6 +7,7 @@ foundationLayout = "1.8.0-alpha08"
 hazeJetpackCompose = "0.4.1"
 javax = "1"
 jsoup = "1.18.1"
+jsoupVersion = "1.15.3"
 kotlin = "2.0.21"
 kotlin-serialization-json = "1.7.1"
 annotation = "1.9.1"
@@ -67,6 +68,7 @@ androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version
 androidx-foundation-layout = { module = "androidx.compose.foundation:foundation-layout", version.ref = "foundationLayout" }
 androidx-media3-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "media3Exoplayer" }
 androidx-media3-ui = { module = "androidx.media3:media3-ui", version.ref = "media3Exoplayer" }
+jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoupVersion" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-material3-adaptive-navigation-suite = { module = "androidx.compose.material3:material3-adaptive-navigation-suite", version.ref = "material3AdaptiveNavigationSuiteVersion" }

@@ -8,9 +8,8 @@ import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.router.stack.pop
 import com.arkivanov.decompose.router.stack.push
 import com.arkivanov.decompose.value.Value
-
+import com.example.contentdetailsscreen.DefaultDetailsComponent
 import com.example.navigation.navigationScreen.DefaultNavigationComponent
-import com.example.navigation.navigationScreen.StubComponent
 import com.example.uikit.models.ContentUI
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
@@ -20,7 +19,7 @@ import kotlinx.parcelize.Parcelize
 
 class DefaultRootComponent @AssistedInject constructor(
     private val navigationComponentFactory: DefaultNavigationComponent.Factory,
-    //  private val contentDetailsComponentFactory: DefaultContentDetailsComponent.Factory,
+    private val contentDetailsComponentFactory: DefaultDetailsComponent.Factory,
     @Assisted("componentContext") componentContext: ComponentContext,
 ) : RootComponent, ComponentContext by componentContext {
 
@@ -48,12 +47,14 @@ class DefaultRootComponent @AssistedInject constructor(
             }
 
             is Config.ContentDetails -> {
-                RootComponent.Child.ContentDetails(
-                    StubComponent(
-                        componentContext = componentContext,
-                        "ContentDetails",
-                        onBack = { navigation.pop()})
+                val component = contentDetailsComponentFactory.create(
+                    content = config.content,
+                    componentContext = componentContext,
+                    onBackClicked = { navigation.pop() },
+                    onClickSetting = {},
+                    onClickShare = {}
                 )
+                RootComponent.Child.ContentDetails(component)
             }
         }
     }

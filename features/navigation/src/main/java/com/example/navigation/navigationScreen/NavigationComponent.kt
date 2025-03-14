@@ -67,6 +67,7 @@ class StubComponent(
     val onBack: () -> Unit = {},
 ) :
     ComponentContext by componentContext {
+
     @Composable
     fun RenderNotBackPress() {
         Box(
@@ -74,7 +75,8 @@ class StubComponent(
 
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "$title Screen", fontSize = 24.sp)
+            Text(text = "ContentID: $title Screen", fontSize = 24.sp)
+
         }
     }
 

@@ -33,6 +33,7 @@ import com.example.uikit.theme.InactiveColor
 @Composable
 fun TabRowCategoryContent(
     modifier: Modifier = Modifier,
+    paddingTab: Dp,
     selectedTab: () -> TabContents,
     onTabSelected: (TabContents) -> Unit,
     tabHeight: State<Dp>,
@@ -49,7 +50,7 @@ fun TabRowCategoryContent(
                 if (index == selectedTab().index) MaterialTheme.colorScheme.onBackground else InactiveColor
             Card(
                 modifier = Modifier
-                    .padding(top = 25.dp)
+                    .padding(top = paddingTab)
                     .width(100.dp)
                     .pointerInput(Unit) {
                         detectTapGestures {

@@ -57,9 +57,9 @@ fun HomeContent(
                 .align(Alignment.CenterHorizontally),
             selectedTab = { selectedTab.value },
             onTabSelected = { component.onClickCategoryContent(it) },
+            paddingTab = 50.dp,
             tabHeight = tabHeight,
         )
-
         Children(component.stack) {
             when (val instance = it.instance) {
                 is HomeComponent.Child.Subscriptions -> {

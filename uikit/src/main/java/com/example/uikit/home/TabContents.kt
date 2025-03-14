@@ -6,7 +6,7 @@ enum class TabContents(val nameTab: String, val index: Int) {
     SUBSCRIPTIONS("Subscriptions",1);
 
     companion object {
-        const val MAX_HEIGHT = 65
+        const val MAX_HEIGHT = 90
         const val MIN_HEIGHT = 0
     }
 

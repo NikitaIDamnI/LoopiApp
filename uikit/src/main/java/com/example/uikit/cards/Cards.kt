@@ -190,6 +190,7 @@ fun ContentCard(
                 onClickContent = onClickContent
             )
         }
+
         is ContentUI.VideoUI -> {
             CardVideo(
                 modifier.fillMaxSize(),
@@ -260,7 +261,11 @@ private fun CardVideo(
     val video = content.getVideo(VideoType.HD)
     val playVideo = isPlayVideo(video.link)
 
-    Box(modifier = modifier.clip(CardDefaults.shape)) {
+    Box(
+        modifier = modifier
+            .clip(CardDefaults.shape)
+            .clickable(onClick = { onClickContent(content) })
+    ) {
         VideoPlayer(
             exoPlayerManager = exoPlayerManager,
             placeholderUrl = content.image,

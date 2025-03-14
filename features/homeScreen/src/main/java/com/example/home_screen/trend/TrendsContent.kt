@@ -1,7 +1,9 @@
 package com.example.home_screen.trend
 
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -22,6 +24,7 @@ fun TrendsContent(
 
     Surface(modifier.fillMaxSize()) {
         AspectoLazyColum(
+            modifier = Modifier.background(MaterialTheme.colorScheme.background),
             contents = { contents.value.content },
             isLoading = { contents.value.stateLoading is StateLoading.Loading },
             onClickContent = onClickContent,

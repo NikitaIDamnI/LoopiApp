@@ -65,5 +65,7 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":core:common"))
     implementation(project(":features:homeScreen"))
+    implementation(project(":features:contentDetailsScreen"))
+
     implementation(project(":uikit"))
 }

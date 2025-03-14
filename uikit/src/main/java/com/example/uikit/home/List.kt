@@ -1,13 +1,12 @@
 package com.example.uikit.home
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
@@ -25,6 +24,7 @@ import com.example.uikit.models.ContentUI.VideoUI.Companion.getVideo
 import com.vipulasri.aspecto.AspectoGrid
 import kotlinx.collections.immutable.PersistentList
 
+@SuppressLint("SuspiciousIndentation")
 @Composable
 fun AspectoLazyColum(
     modifier: Modifier = Modifier,
@@ -38,64 +38,61 @@ fun AspectoLazyColum(
     val exoPlayerManager = rememberExoPlayerManager(LocalContext.current)
     val statePlayer = exoPlayerManager.value.state.collectAsState()
 
-
-    Surface(
-        modifier = modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.background
+    AspectoGrid(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(start = 5.dp, end = 5.dp),
+        maxRowHeight = maxRowHeight,
+        itemPadding = PaddingValues(
+            horizontal = 5.dp,
+            vertical = 4.dp
+        ),
     ) {
-        AspectoGrid(
-            modifier = Modifier.padding(start = 5.dp, end = 5.dp),
-            maxRowHeight = maxRowHeight,
-            itemPadding = PaddingValues(
-                horizontal = 5.dp,
-                vertical = 4.dp
-            ),
-        ) {
-            items(
-                items = contents(),
-                key = { it.idContent},
-                aspectRatio = {
-                    when (it) {
-                        is ContentUI.PhotoUI -> it.width.toFloat() / it.height.toFloat()
-                        is ContentUI.VideoUI -> {
-                            val video = it.getVideo(VideoType.SD)
-                            (video.width.toFloat() / video.height.toFloat()).coerceAtMost(16f / 9f)
-                        }
+        items(
+            items = contents(),
+            key = { it.idContent },
+            aspectRatio = {
+                when (it) {
+                    is ContentUI.PhotoUI -> it.width.toFloat() / it.height.toFloat()
+                    is ContentUI.VideoUI -> {
+                        val video = it.getVideo(VideoType.SD)
+                        (video.width.toFloat() / video.height.toFloat()).coerceAtMost(16f / 9f)
                     }
                 }
-            ) { item ->
-                ContentCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    content = item,
-                    exoPlayerManager = exoPlayerManager.value,
-                    onClickContent = onClickContent,
-                    isPlayVideo = { video -> statePlayer.value.contentUrl == video && statePlayer.value.isPlaying },
-                    isShowVideo = { video -> statePlayer.value.contentUrl == video && statePlayer.value.isShow },
-                    onPlayVideo = { url ->
-                        exoPlayerManager.value.play(url)
-                    },
-                    onPauseVideo = {
-                        exoPlayerManager.value.pause()
-                    }
-                )
             }
-            item(0.1f) {
-                if (isLoading()) {
-                    Box(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.align(Alignment.Center),
-                            color = Color.Black
-                        )
-                    }
-                } else {
-                    SideEffect {
-                        onLoadNextContent()
-                    }
+        ) { item ->
+            ContentCard(
+                modifier = Modifier.fillMaxWidth(),
+                content = item,
+                exoPlayerManager = exoPlayerManager.value,
+                onClickContent = onClickContent,
+                isPlayVideo = { video -> statePlayer.value.contentUrl == video && statePlayer.value.isPlaying },
+                isShowVideo = { video -> statePlayer.value.contentUrl == video && statePlayer.value.isShow },
+                onPlayVideo = { url ->
+                    exoPlayerManager.value.play(url)
+                },
+                onPauseVideo = {
+                    exoPlayerManager.value.pause()
+                }
+            )
+        }
+        item(0.1f) {
+            if (isLoading()) {
+                Box(
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = Color.Black
+                    )
+                }
+            } else {
+                SideEffect {
+                    onLoadNextContent()
                 }
             }
         }
     }
+
 }
 

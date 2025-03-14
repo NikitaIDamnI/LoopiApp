@@ -60,6 +60,7 @@ interface TrendsScreenStore :
 class TrendsScreenStoreFactory @Inject constructor(
     private val storeFactory: StoreFactory,
     private val trendsUseCase: TrendsUseCase,
+
 ) {
 
     fun create(): TrendsScreenStore =

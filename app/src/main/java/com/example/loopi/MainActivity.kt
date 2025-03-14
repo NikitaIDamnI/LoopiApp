@@ -31,7 +31,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         val defaultContext = defaultComponentContext()
         setContent {
-            LoopiTheme {
+            LoopiTheme{
                 RootContent(
                     component = rootComponentFactory.create(defaultContext),
                 )

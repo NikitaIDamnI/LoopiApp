@@ -5,7 +5,6 @@ import androidx.compose.runtime.Immutable
 import com.example.domain.models.VideoType
 import kotlinx.collections.immutable.PersistentList
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
 
 
 sealed class ContentUI(
@@ -14,17 +13,17 @@ sealed class ContentUI(
     @Immutable
     @Parcelize
     data class PhotoUI(
-        val id: Int,
-        val width: Int,
-        val height: Int,
-        val url: String,
-        val photographer: String,
-        val photographerUrl: String,
-        val photographerId: Long,
-        val avgColor: Int,
-        val src: SrcUI,
-        val liked: Boolean,
-        val alt: String,
+        val id: Int = -1,
+        val width: Int = -1,
+        val height: Int = -1,
+        val url: String = "",
+        val photographer: String= "",
+        val photographerUrl: String= "",
+        val photographerId: Long = -1,
+        val avgColor: Int= -1,
+        val src: SrcUI = SrcUI(),
+        val liked: Boolean = false,
+        val alt: String = "",
     ) : ContentUI(idContent = id)
 
     @Immutable
