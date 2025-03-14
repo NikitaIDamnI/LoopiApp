@@ -117,7 +117,6 @@ private fun DetailsContentPreview() {
                         .padding(top = it.calculateTopPadding()),
                     content = PhotoUI()
                 )
-                UserProfileCard("Nikita Bukhsrin")
                 ContentActions(isFavorite = true, onClickLike = { }, onClickShare = { })
                 Spacer(Modifier.padding(top = 20.dp))
                 MoreSimilarContent(alt = listOf<String>())
