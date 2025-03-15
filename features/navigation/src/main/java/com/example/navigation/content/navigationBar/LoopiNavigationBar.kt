@@ -4,7 +4,6 @@ import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectTapGestures
@@ -45,7 +44,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.models.Screen
 import com.example.navigation.NavigationItem
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.hazeChild
@@ -55,9 +53,8 @@ import dev.chrisbanes.haze.hazeChild
 fun LoopiNavBar(
     modifier: Modifier = Modifier,
     hazeState: HazeState,
-    currentRoute: State<String>,
-    onNavigation: (Screen) -> Unit,
-    onClick: (String) -> Unit,
+    currentRoute: State<NavigationItem>,
+    onNavigation: (NavigationItem) -> Unit,
 ) {
     val tabs = NavigationItem.getNavigationItems()
     val currentRoute by currentRoute
@@ -82,13 +79,12 @@ fun LoopiNavBar(
         color = Color.Transparent
     ) {
 
-        val selectedTabIndex = tabs.indexOfFirst { it.route == currentRoute }
+        val selectedTabIndex = tabs.indexOfFirst { it == currentRoute }
 
         LoopiBottomBarTabs(
             tabs = tabs,
             currentRoute = currentRoute,
             onNavigation = onNavigation,
-            onClick = onClick
         )
         val animatedSelectedTabIndex by animateFloatAsState(
             targetValue = selectedTabIndex.toFloat(), label = "animatedSelectedTabIndex",
@@ -163,9 +159,8 @@ fun LoopiNavBar(
 fun LoopiBottomBarTabs(
     modifier: Modifier = Modifier,
     tabs: List<NavigationItem>,
-    currentRoute: String,
-    onNavigation: (Screen) -> Unit,
-    onClick: (String) -> Unit,
+    currentRoute: NavigationItem,
+    onNavigation: (NavigationItem) -> Unit,
 ) {
     CompositionLocalProvider(
         LocalTextStyle provides LocalTextStyle.current.copy(
@@ -183,7 +178,7 @@ fun LoopiBottomBarTabs(
         ) {
             for (tab in tabs) {
                 val alpha by animateFloatAsState(
-                    targetValue = if (currentRoute == tab.route) 1f else .35f,
+                    targetValue = if (currentRoute == tab) 1f else .35f,
                     label = "alpha"
                 )
                 Icon(
@@ -193,8 +188,7 @@ fun LoopiBottomBarTabs(
                         .size(40.dp)
                         .pointerInput(Unit) {
                             detectTapGestures {
-                                onNavigation(tab.screen)
-                                onClick(tab.route)
+                                onNavigation(tab)
                             }
                         },
                     imageVector = tab.icon,

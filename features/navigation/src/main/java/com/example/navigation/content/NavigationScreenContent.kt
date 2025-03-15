@@ -13,90 +13,110 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import com.example.domain.models.Screen
+import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
+import com.example.home_screen.home.HomeContent
 import com.example.navigation.NavigationItem
-import com.example.navigation.NavigationScreenGraph
+
 import com.example.navigation.content.navigationBar.LoopiNavBar
-import com.example.navigation.rememberNavigationState
+import com.example.navigation.navigationScreen.NavigationComponent
 import dev.chrisbanes.haze.HazeState
 import dev.chrisbanes.haze.haze
 
 @Composable
-fun NavigationScreen(
-    homeScreen: @Composable () -> Unit,
-    searchScreen: @Composable () -> Unit,
-    addScreen: @Composable () -> Unit,
-    profileScreen: @Composable () -> Unit,
-    notificationsScreen: @Composable () -> Unit,
-    filterScreen: @Composable () -> Unit,
-
-    ) {
-    val navigationState = rememberNavigationState()
-    NavigationScreenContent(
-        navController = navigationState.navController,
-        homeScreen = homeScreen,
-        searchScreen = searchScreen,
-        addScreen = addScreen,
-        profileScreen = profileScreen,
-        notificationsScreen = notificationsScreen,
-        filterScreen = filterScreen,
-        onNavigation = navigationState::navigateTo
-    )
-}
-
-@Composable
-private fun NavigationScreenContent(
-    modifier: Modifier = Modifier,
-    navController: NavHostController,
-    homeScreen: @Composable () -> Unit,
-    searchScreen: @Composable () -> Unit,
-    addScreen: @Composable () -> Unit,
-    profileScreen: @Composable () -> Unit,
-    notificationsScreen: @Composable () -> Unit,
-    filterScreen: @Composable () -> Unit,
-    onNavigation: (Screen) -> Unit,
-) {
-
-    var currentRoute = remember { mutableStateOf<String>(NavigationItem.Home.route) }
+fun NavigationScreen(component: NavigationComponent) {
     val hazeState = remember { HazeState() }
+    val currentNavigationItem = remember { mutableStateOf<NavigationItem>(NavigationItem.Home) }
 
     Box(
-        modifier = modifier
+        modifier = Modifier
             .background(MaterialTheme.colorScheme.background)
             .fillMaxSize(),
     ) {
+        // Главный контейнер с размытой областью
         Box(
             modifier = Modifier
                 .haze(
                     hazeState,
                     backgroundColor = MaterialTheme.colorScheme.background,
                     tint = Color.Black.copy(alpha = .2f),
-                    blurRadius = 30.dp,
+                    blurRadius = 30.dp
                 )
                 .background(Color.Transparent)
         ) {
-            NavigationScreenGraph(
-                navController = navController,
-                homeScreen = homeScreen,
-                searchScreen = searchScreen,
-                addScreen = addScreen,
-                profileScreen = profileScreen,
-                notificationsScreen = notificationsScreen,
-                filterScreen = filterScreen
-            )
+            // Здесь отображаются экраны
+            Children(stack = component.stack) { child ->
+                when (val instance = child.instance) {
+                    is NavigationComponent.Child.Home -> {
+                        HomeContent(
+                            component= instance.component,
+                            onClickContent = { instance.component.onClickContent(it) },
+                            onSetting = {},
+                        )
+                        currentNavigationItem.value = NavigationItem.Home
+                    }
+
+                    is NavigationComponent.Child.Search -> {
+                        instance.component.RenderNotBackPress()
+                        currentNavigationItem.value = NavigationItem.Search
+                    }
+
+                    is NavigationComponent.Child.Add -> {
+                        instance.component.RenderNotBackPress()
+                        currentNavigationItem.value = NavigationItem.Add
+                    }
+
+                    is NavigationComponent.Child.Profile -> {
+                        instance.component.RenderNotBackPress()
+                        currentNavigationItem.value = NavigationItem.Profile
+                    }
+
+                    is NavigationComponent.Child.Notifications -> {
+                        instance.component.RenderNotBackPress()
+                        currentNavigationItem.value = NavigationItem.Notifications
+                    }
+
+                    is NavigationComponent.Child.Filter -> {
+
+                    }
+                }
+            }
         }
 
+        // Нижняя навигационная панель
         LoopiNavBar(
             modifier = Modifier.align(Alignment.BottomCenter),
             hazeState = hazeState,
-            currentRoute =  currentRoute ,
-            onNavigation = onNavigation,
-            onClick = { currentRoute.value = it }
-        )
+            currentRoute = currentNavigationItem,
+            onNavigation = { onNavigation(it, component) },
+
+            )
     }
 }
 
+
+private fun onNavigation(item: NavigationItem, component: NavigationComponent) {
+    when (item) {
+        NavigationItem.Add -> {
+            component.navigateTo(NavigationComponent.TabConfig.Add)
+        }
+
+        NavigationItem.Home -> {
+            component.navigateTo(NavigationComponent.TabConfig.Home)
+        }
+
+        NavigationItem.Notifications -> {
+            component.navigateTo(NavigationComponent.TabConfig.Notifications)
+        }
+
+        NavigationItem.Profile -> {
+            component.navigateTo(NavigationComponent.TabConfig.Profile)
+        }
+
+        NavigationItem.Search -> {
+            component.navigateTo(NavigationComponent.TabConfig.Search)
+        }
+    }
+}
 
 
 

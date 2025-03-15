@@ -55,6 +55,8 @@ dependencies {
 
 //Hilt
     implementation(libs.dagger.hilt.android)
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.constraintlayout)
     kapt(libs.dagger.hilt.compiler)
 
     //Coil
@@ -70,14 +72,15 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
 //Modules
     implementation(project(":uikit"))
     implementation(project(":core:di"))
     implementation(project(":core:domain"))
+    implementation(project(":core:common"))
     implementation(project(":features:authScreen"))
     implementation(project(":features:homeScreen"))
     implementation(project(":features:navigation"))
-
 
 
 

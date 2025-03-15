@@ -1,5 +1,7 @@
 package com.example.di
 
+import com.arkivanov.mvikotlin.core.store.StoreFactory
+import com.arkivanov.mvikotlin.main.store.DefaultStoreFactory
 import com.example.data.repisitory.ContentRepositoryImpl
 import com.example.domain.repository.ContentRepository
 import com.example.pexels_api.PexelsApi
@@ -33,6 +35,8 @@ interface AppModule {
             )
 
         }
+        @Provides
+        fun provideStoreFactory(): StoreFactory = DefaultStoreFactory()
 
         @Provides
         @Singleton

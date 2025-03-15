@@ -8,7 +8,7 @@ private val DarkColorScheme = androidx.compose.material3.darkColorScheme(
     primary = Purple80,
     secondary = PurpleGrey80,
     tertiary = Pink80,
-    background = Color.Black,
+    background = MainBackgroundColor,
     onBackground = Color.White
 )
 
@@ -17,7 +17,7 @@ private val LightColorScheme = androidx.compose.material3.lightColorScheme(
     secondary = PurpleGrey40,
     tertiary = Pink40,
     background = Color.White,
-    onBackground = Color.Black
+    onBackground = Color.Black,
 
 
     /* Other default colors to override
@@ -35,7 +35,7 @@ private val LightColorScheme = androidx.compose.material3.lightColorScheme(
 fun LoopiTheme(
     darkTheme: Boolean = androidx.compose.foundation.isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    dynamicColor: Boolean = false,
     content: @androidx.compose.runtime.Composable () -> Unit,
 ) {
     val colorScheme = when {

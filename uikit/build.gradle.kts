@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.parcelize)
 }
 
 android {
@@ -62,7 +63,8 @@ dependencies {
     //Compose
     api(libs.androidx.activity.compose)
     api(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compiler)
+    api(libs.androidx.compiler)
+    api (libs.androidx.compose.foundation)
 
     //Coil
     implementation(libs.coil.core)

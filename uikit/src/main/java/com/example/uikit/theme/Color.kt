@@ -12,11 +12,12 @@ val Pink80 = androidx.compose.ui.graphics.Color(0xFFEFB8C8)
 val Purple40 = androidx.compose.ui.graphics.Color(0xFF6650a4)
 val PurpleGrey40 = androidx.compose.ui.graphics.Color(0xFF625b71)
 val Pink40 = androidx.compose.ui.graphics.Color(0xFF7D5260)
-val MainBackgroundColor = Color(0xFFD5DFCF)
+val MainBackgroundColor = Color(0xFF312d29)
 val ColorMainGreen = Color(0xFF17494D)
 val ColorBottomLogging = Color(0xFFEBDDC9)
 val TextColorLogging = Color(0xFF74966F)
 val InactiveColor = Color(0xFFAEB6AE)
+val LightBackgroundColo = Color(color = 0xFFafafaf)
 
 
 

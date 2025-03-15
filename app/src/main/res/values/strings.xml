@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Loopi</string>
     <string name="title_dynamicfeature">core</string>
-      <string name="title_core">Core</string>
+    <string name="title_core">Core</string>
 </resources>

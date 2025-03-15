@@ -47,8 +47,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.example.domain.models.Content
-import com.example.domain.models.Content.Video.Companion.getVideo
 import com.example.domain.models.Registration
 import com.example.domain.models.VideoType
 import com.example.uikit.R
@@ -192,6 +190,7 @@ fun ContentCard(
                 onClickContent = onClickContent
             )
         }
+
         is ContentUI.VideoUI -> {
             CardVideo(
                 modifier.fillMaxSize(),
@@ -262,7 +261,11 @@ private fun CardVideo(
     val video = content.getVideo(VideoType.HD)
     val playVideo = isPlayVideo(video.link)
 
-    Box(modifier = modifier.clip(CardDefaults.shape)) {
+    Box(
+        modifier = modifier
+            .clip(CardDefaults.shape)
+            .clickable(onClick = { onClickContent(content) })
+    ) {
         VideoPlayer(
             exoPlayerManager = exoPlayerManager,
             placeholderUrl = content.image,

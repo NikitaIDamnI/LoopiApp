@@ -22,12 +22,12 @@
             <option value="$PROJECT_DIR$/core/pexelsApi" />
             <option value="$PROJECT_DIR$/features" />
             <option value="$PROJECT_DIR$/features/authScreen" />
+            <option value="$PROJECT_DIR$/features/contentDetailsScreen" />
             <option value="$PROJECT_DIR$/features/homeScreen" />
             <option value="$PROJECT_DIR$/features/navigation" />
             <option value="$PROJECT_DIR$/uikit" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>

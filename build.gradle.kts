@@ -15,6 +15,30 @@ plugins {
     alias(libs.plugins.detekt) apply false
     alias(libs.plugins.android.test) apply false
     alias(libs.plugins.baselineprofile) apply false
+    alias(libs.plugins.parcelize) apply false
+
+}
+
+
+
+
+subprojects {
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+
+        compilerOptions {
+            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
+            freeCompilerArgs.addAll(
+                listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
+                            project.layout.buildDirectory.get().asFile.absolutePath + "/compose_metrics",
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
+                            project.layout.buildDirectory.get().asFile.absolutePath + "/compose_metrics"
+                )
+            )
+        }
+    }
 }
 
 subprojects {
@@ -46,15 +70,25 @@ allprojects.onEach { project ->
                 project.extensions.configure<DetektExtension> {
                     config.setFrom(rootProject.files("default-detekt-config.yml"))
                 }
-                project.dependencies.add("detektPlugins", libs.detekt.formatting.get().toString())
-            }
 
-            if (hasPlugin(libs.plugins.kotlin.compose.get().pluginId)) {
+                // Добавляем стандартные правила Detekt
+                project.dependencies.add("detektPlugins", libs.detekt.formatting.get().toString())
+
+                // Добавляем правила для Jetpack Compose
+                if (hasPlugin(libs.plugins.kotlin.compose.get().pluginId)) {
+                    project.dependencies.add(
+                        "detektPlugins",
+                        libs.detekt.rules.compose.get().toString()
+                    )
+                }
+
+                // ✅ Добавляем `decompose-detekt-rules`
                 project.dependencies.add(
                     "detektPlugins",
-                    libs.detekt.rules.compose.get().toString()
+                    "io.github.ajiekcx.detekt:decompose-detekt-rules:0.2.0"
                 )
             }
         }
     }
 }
+
