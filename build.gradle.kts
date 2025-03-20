@@ -22,24 +22,7 @@ plugins {
 
 
 
-subprojects {
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
 
-        compilerOptions {
-            jvmTarget.set(org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11)
-            freeCompilerArgs.addAll(
-                listOf(
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:metricsDestination=" +
-                            project.layout.buildDirectory.get().asFile.absolutePath + "/compose_metrics",
-                    "-P",
-                    "plugin:androidx.compose.compiler.plugins.kotlin:reportsDestination=" +
-                            project.layout.buildDirectory.get().asFile.absolutePath + "/compose_metrics"
-                )
-            )
-        }
-    }
-}
 
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
@@ -71,10 +54,10 @@ allprojects.onEach { project ->
                     config.setFrom(rootProject.files("default-detekt-config.yml"))
                 }
 
-                // Добавляем стандартные правила Detekt
+             
                 project.dependencies.add("detektPlugins", libs.detekt.formatting.get().toString())
 
-                // Добавляем правила для Jetpack Compose
+
                 if (hasPlugin(libs.plugins.kotlin.compose.get().pluginId)) {
                     project.dependencies.add(
                         "detektPlugins",
@@ -82,7 +65,7 @@ allprojects.onEach { project ->
                     )
                 }
 
-                // ✅ Добавляем `decompose-detekt-rules`
+              
                 project.dependencies.add(
                     "detektPlugins",
                     "io.github.ajiekcx.detekt:decompose-detekt-rules:0.2.0"
