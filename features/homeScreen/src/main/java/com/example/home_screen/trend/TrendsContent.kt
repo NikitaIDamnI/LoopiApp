@@ -30,9 +30,11 @@ fun TrendsContent(
             onClickContent = onClickContent,
             onSettingContent = onSetting,
             onLoadNextContent = { componentContext.loadNextContent() }
-       )
+        )
     }
 }
+
+
 
 
 
