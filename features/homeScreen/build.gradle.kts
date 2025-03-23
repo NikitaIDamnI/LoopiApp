@@ -72,5 +72,6 @@ dependencies {
     implementation(project(":core:domain"))
     implementation(project(":uikit"))
     implementation(project(":core:common"))
+    implementation(project(":core:media"))
 
 }

@@ -43,19 +43,18 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.domain.models.Registration
 import com.example.domain.models.VideoType
+import com.example.media.ExoPlayerManager
 import com.example.uikit.R
-import com.example.uikit.exoPlayer.ExoPlayerManager
-import com.example.uikit.exoPlayer.VideoPlayer
 import com.example.uikit.loginUiKit.LoggingBottoms
 import com.example.uikit.loginUiKit.LoggingTextField
 import com.example.uikit.models.ContentUI
 import com.example.uikit.models.ContentUI.VideoUI.Companion.getVideo
+import com.example.uikit.player.VideoPlayer
 import com.example.uikit.theme.ColorMainGreen
 import com.example.uikit.theme.MontserratRegular
 
@@ -309,11 +308,14 @@ private fun CardVideo(
 
 }
 
-@Preview
+
 @Composable
-fun Preview() {
-    RegistrationCard(
-        onLoginRequest = {},
-        onGuestRequest = {}
-    )
+fun CardLoading(modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier.fillMaxSize(),
+        colors = CardDefaults.cardColors(containerColor = Color.DarkGray.copy(.2f)),
+        shape = RoundedCornerShape(2)
+    ){
+    }
+
 }

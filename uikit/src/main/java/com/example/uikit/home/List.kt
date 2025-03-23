@@ -1,28 +1,29 @@
 package com.example.uikit.home
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Box
+import android.app.Application
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.example.domain.models.VideoType
+import com.example.media.rememberExoPlayerManager
+import com.example.uikit.cards.CardLoading
 import com.example.uikit.cards.ContentCard
-import com.example.uikit.exoPlayer.rememberExoPlayerManager
 import com.example.uikit.models.ContentUI
 import com.example.uikit.models.ContentUI.VideoUI.Companion.getVideo
 import com.vipulasri.aspecto.AspectoGrid
 import kotlinx.collections.immutable.PersistentList
+import kotlin.math.max
+import kotlin.math.min
+import kotlin.random.Random
 
 @SuppressLint("SuspiciousIndentation")
 @Composable
@@ -35,7 +36,10 @@ fun AspectoLazyColum(
     onSettingContent: () -> Unit,
     onLoadNextContent: () -> Unit,
 ) {
-    val exoPlayerManager = rememberExoPlayerManager(LocalContext.current)
+    val applicationContext = LocalContext.current.applicationContext as Application
+    val exoPlayerManager = rememberExoPlayerManager(
+        application = applicationContext
+    )
     val statePlayer = exoPlayerManager.value.state.collectAsState()
 
     AspectoGrid(
@@ -76,23 +80,36 @@ fun AspectoLazyColum(
                 }
             )
         }
-        item(0.1f) {
-            if (isLoading()) {
-                Box(
-                    modifier = Modifier.fillMaxSize()
-                ) {
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(Alignment.Center),
-                        color = Color.Black
-                    )
-                }
-            } else {
+
+        if (isLoading()){
+            items(
+                items = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+                key = { it },
+                aspectRatio = { generateRandomAspectRatio() }
+            ) {
+                CardLoading(modifier)
+            }
+
+        }
+        item(.1f) {
+            if (!isLoading()) {
                 SideEffect {
                     onLoadNextContent()
                 }
             }
         }
-    }
 
+    }
 }
+
+fun generateRandomAspectRatio(): Float {
+    val width = Random.nextInt(200, 400)
+    val height = Random.nextInt(200, 400)
+    val maxAspect = 16f / 9f
+    val minAspect = 9f / 16f
+    return max(minAspect, min(maxAspect, width.toFloat() / height.toFloat()))
+}
+
+
+
 
