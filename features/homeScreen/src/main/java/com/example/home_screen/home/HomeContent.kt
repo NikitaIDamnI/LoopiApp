@@ -1,5 +1,6 @@
 package com.example.home_screen.home
 
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,12 +21,22 @@ import androidx.compose.ui.unit.Velocity
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.min
-import com.arkivanov.decompose.extensions.compose.jetpack.stack.Children
+import com.arkivanov.decompose.FaultyDecomposeApi
+import com.arkivanov.decompose.extensions.compose.stack.Children
+import com.arkivanov.decompose.extensions.compose.stack.animation.StackAnimator
+import com.arkivanov.decompose.extensions.compose.stack.animation.fade
+import com.arkivanov.decompose.extensions.compose.stack.animation.plus
+import com.arkivanov.decompose.extensions.compose.stack.animation.slide
+import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
+import com.example.common.utils.ANIMATION_SPEED
 import com.example.home_screen.home.tab.TabRowCategoryContent
 import com.example.home_screen.trend.TrendsContent
+import com.example.uikit.decompose.navigation.invert
 import com.example.uikit.home.TabContents
 import com.example.uikit.models.ContentUI
 
+
+@OptIn(FaultyDecomposeApi::class)
 @Composable
 fun HomeContent(
     modifier: Modifier = Modifier,
@@ -60,7 +71,11 @@ fun HomeContent(
             paddingTab = 50.dp,
             tabHeight = tabHeight,
         )
-        Children(component.stack) {
+        Children(
+            component.stack,
+            animation = stackAnimation { animationChild(it.instance) }
+
+        ) {
             when (val instance = it.instance) {
                 is HomeComponent.Child.Subscriptions -> {
                     instance.component.Render()
@@ -77,6 +92,19 @@ fun HomeContent(
         }
 
 
+    }
+
+}
+
+fun animationChild(child: HomeComponent.Child): StackAnimator{
+    return when(child) {
+        is HomeComponent.Child.Subscriptions -> {
+            slide(animationSpec = tween(ANIMATION_SPEED)).plus(fade())
+        }
+
+        is HomeComponent.Child.Trends -> {
+            slide(animationSpec = tween(ANIMATION_SPEED)).invert().plus(fade())
+        }
     }
 
 }

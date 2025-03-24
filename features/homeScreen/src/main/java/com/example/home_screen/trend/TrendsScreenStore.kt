@@ -60,8 +60,7 @@ interface TrendsScreenStore :
 class TrendsScreenStoreFactory @Inject constructor(
     private val storeFactory: StoreFactory,
     private val trendsUseCase: TrendsUseCase,
-
-) {
+    ) {
 
     fun create(): TrendsScreenStore =
         object : TrendsScreenStore,
@@ -116,52 +115,13 @@ class TrendsScreenStoreFactory @Inject constructor(
 
     private inner class ExecutorImpl :
         CoroutineExecutor<TrendsScreenStore.Intent, Action, TrendsScreenStore.State, Msg, TrendsScreenStore.Label>() {
-        private val mutex = Mutex()
+        private val loadingMutex = Mutex()
         private var isThrottled = false
 
 
-        override fun executeIntent(
-            intent: TrendsScreenStore.Intent,
-            getState: () -> TrendsScreenStore.State,
-        ) {
+        override fun executeIntent(intent: TrendsScreenStore.Intent) {
             when (intent) {
-                is TrendsScreenStore.Intent.LoadNextContent ->
-                    scope.launch {
-                        if (isThrottled) {
-                            logD(this@ExecutorImpl, "Throttling active: Function call ignored")
-                            return@launch
-                        }
-                        mutex.withLock {
-                            if (intent.page.next != TrendsScreenStore.State.Companion.NULL_PAGE) {
-                                logD(this@ExecutorImpl, "No more pages to load or already loading")
-                                return@withLock
-                            }
-                            isThrottled = true
-                            dispatch(Msg.Loading)
-                        }
-                        val nextPage = intent.page.next
-                        logD(this@ExecutorImpl, "Start loading content page = $nextPage")
-                        trendsUseCase(page = nextPage)
-                            .catch { exception ->
-                                dispatch(Msg.LoadingError(exception.message ?: UNKNOWN_ERROR))
-                                isThrottled = false
-                            }
-                            .collect { resultApi ->
-                                val content = resultApi.content.toUI()
-                                dispatch(
-                                    Msg.LoadContent(
-                                        content = content, TrendsScreenStore.State.Page(
-                                            current = resultApi.page,
-                                            next = resultApi.nextPage.parseNextPage()
-                                        )
-                                    )
-                                )
-
-                                delay(TIME_DELAY_LOADING)
-                                logD(this@ExecutorImpl, "Finish Delay")
-                                isThrottled = false
-                            }
-                    }
+                is TrendsScreenStore.Intent.LoadNextContent -> loadNextContent(intent)
 
                 is TrendsScreenStore.Intent.ClickContent -> {
                     publish(TrendsScreenStore.Label.ClickContent(intent.сontent))
@@ -170,10 +130,10 @@ class TrendsScreenStoreFactory @Inject constructor(
             }
         }
 
-        override fun executeAction(action: Action, getState: () -> TrendsScreenStore.State) {
+
+        override fun executeAction(action: Action) {
             when (action) {
                 is Action.LoadFirstContent -> {
-                    logD(this@ExecutorImpl, "LoadFirstContent ${action.page}")
                     dispatch(
                         Msg.LoadContent(
                             content = action.content,
@@ -186,6 +146,45 @@ class TrendsScreenStoreFactory @Inject constructor(
                     dispatch(Msg.LoadingError(message = action.error))
                 }
             }
+        }
+
+        private fun loadNextContent(intent: TrendsScreenStore.Intent.LoadNextContent) {
+            scope.launch {
+                if (isThrottled) {
+                    logD(this@ExecutorImpl, "Throttling active: Function call ignored")
+                    return@launch
+                }
+                loadingMutex.withLock {
+                    if (intent.page.next != TrendsScreenStore.State.Companion.NULL_PAGE) {
+                        logD(this@ExecutorImpl, "No more pages to load or already loading")
+                        return@withLock
+                    }
+                    isThrottled = true
+                    dispatch(Msg.Loading)
+                }
+                val nextPage = intent.page.next
+                logD(this@ExecutorImpl, "Start loading content page = $nextPage")
+                trendsUseCase(page = nextPage)
+                    .catch { exception ->
+                        dispatch(Msg.LoadingError(exception.message ?: UNKNOWN_ERROR))
+                        isThrottled = false
+                    }
+                    .collect { resultApi ->
+                        val content = resultApi.content.toUI()
+                        dispatch(
+                            Msg.LoadContent(
+                                content = content, TrendsScreenStore.State.Page(
+                                    current = resultApi.page,
+                                    next = resultApi.nextPage.parseNextPage()
+                                )
+                            )
+                        )
+                        delay(TIME_DELAY_LOADING)
+                        logD(this@ExecutorImpl, "Finish Delay")
+                        isThrottled = false
+                    }
+            }
+
         }
     }
 
@@ -204,15 +203,11 @@ class TrendsScreenStoreFactory @Inject constructor(
                 }
 
                 Msg.Loading -> {
-                    copy(
-                        stateLoading = StateLoading.Loading,
-                    )
+                    copy(stateLoading = StateLoading.Loading,)
                 }
 
                 is Msg.LoadingError -> {
-                    copy(
-                        stateLoading = StateLoading.Error(message.message),
-                    )
+                    copy(stateLoading = StateLoading.Error(message.message),)
                 }
             }
 

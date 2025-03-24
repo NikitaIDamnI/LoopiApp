@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.SmartDisplay
@@ -43,19 +45,18 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.domain.models.Registration
 import com.example.domain.models.VideoType
+import com.example.media.ExoPlayerManager
 import com.example.uikit.R
-import com.example.uikit.exoPlayer.ExoPlayerManager
-import com.example.uikit.exoPlayer.VideoPlayer
 import com.example.uikit.loginUiKit.LoggingBottoms
 import com.example.uikit.loginUiKit.LoggingTextField
 import com.example.uikit.models.ContentUI
 import com.example.uikit.models.ContentUI.VideoUI.Companion.getVideo
+import com.example.uikit.player.VideoPlayer
 import com.example.uikit.theme.ColorMainGreen
 import com.example.uikit.theme.MontserratRegular
 
@@ -171,6 +172,7 @@ fun RegistrationCard(
     }
 }
 
+
 @Composable
 fun ContentCard(
     modifier: Modifier = Modifier,
@@ -185,7 +187,8 @@ fun ContentCard(
     when (val content = content) {
         is ContentUI.PhotoUI -> {
             CardPhoto(
-                modifier.fillMaxSize(),
+                modifier
+                    .wrapContentSize(),
                 content = content,
                 onClickContent = onClickContent
             )
@@ -193,7 +196,8 @@ fun ContentCard(
 
         is ContentUI.VideoUI -> {
             CardVideo(
-                modifier.fillMaxSize(),
+                modifier
+                    .wrapContentSize(),
                 content = content,
                 exoPlayerManager = exoPlayerManager,
                 onClickContent = onClickContent,
@@ -204,8 +208,6 @@ fun ContentCard(
             )
         }
     }
-
-
 }
 
 @Composable
@@ -260,60 +262,69 @@ private fun CardVideo(
 ) {
     val video = content.getVideo(VideoType.HD)
     val playVideo = isPlayVideo(video.link)
-
-    Box(
-        modifier = modifier
-            .clip(CardDefaults.shape)
-            .clickable(onClick = { onClickContent(content) })
-    ) {
-        VideoPlayer(
-            exoPlayerManager = exoPlayerManager,
-            placeholderUrl = content.image,
-            isPlayVideo = { playVideo },
-            isShowVideo = { isShowVideo(video.link) },
-            modifier = Modifier.fillMaxSize(),
-        )
-        Icon(
-            modifier = Modifier
-                .align(Alignment.TopStart)
-                .padding(10.dp)
-                .clickable {
-                    if (playVideo) {
-                        onPauseVideo()
-                    } else {
-                        onPlayVideo(video.link)
-                    }
-                },
-            imageVector = Icons.Default.SmartDisplay,
-            contentDescription = "Play Video",
-            tint = if (isPlayVideo(video.link)) Color.Green else Color.White
-        )
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(Alignment.BottomStart)
-                .background(Color.Transparent.copy(0.2f))
+    val interactionSource = remember { MutableInteractionSource() }
+    Column {
+        Box(
+            modifier = modifier
+                .clip(CardDefaults.shape)
+                .clickable(onClick = { onClickContent(content) })
         ) {
-            Text(
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 10.dp),
-                text = content.user.name,
-                fontSize = 12.sp,
-                color = Color.White,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+            VideoPlayer(
+                exoPlayerManager = exoPlayerManager,
+                placeholderUrl = content.image,
+                isPlayVideo = { playVideo },
+                isShowVideo = { isShowVideo(video.link) },
+                modifier = Modifier.fillMaxSize(),
             )
+            Icon(
+                modifier = Modifier
+                    .align(Alignment.TopStart)
+                    .padding(10.dp)
+                    .clickable(
+                        indication = null,
+                        interactionSource = interactionSource
+                    ) {
+                        if (playVideo) {
+                            onPauseVideo()
+                        } else {
+                            onPlayVideo(video.link)
+                        }
+                    },
+                imageVector = Icons.Default.SmartDisplay,
+                contentDescription = "Play Video",
+                tint = if (isPlayVideo(video.link)) Color.Transparent.copy(.5f) else Color.White
+            )
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .align(Alignment.BottomStart)
+                    .background(Color.Transparent.copy(0.2f))
+            ) {
+                Text(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 10.dp),
+                    text = content.user.name,
+                    fontSize = 12.sp,
+                    color = Color.White,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
+
     }
 
 }
 
-@Preview
+
 @Composable
-fun Preview() {
-    RegistrationCard(
-        onLoginRequest = {},
-        onGuestRequest = {}
-    )
+fun CardLoading(modifier: Modifier = Modifier) {
+    Card(
+        modifier = modifier.fillMaxSize(),
+        colors = CardDefaults.cardColors(containerColor = Color.DarkGray.copy(.2f)),
+        shape = RoundedCornerShape(2)
+    ) {
+    }
+
 }

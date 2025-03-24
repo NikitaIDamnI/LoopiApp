@@ -35,6 +35,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -63,13 +64,28 @@ fun DetailsContent(component: DetailsComponent) {
         is ContentUI.PhotoUI -> listOf<String>()
         is ContentUI.VideoUI -> content.tags
     }
+    ContentDetails(
+        state = state,
+        user = user,
+        alt = alt,
+        onBackClick = component::onBackClick,
+        onClickLike = component::onClickLike
+    )
+}
 
+@Composable
+private fun ContentDetails(
+    state: State<ContentDetailsStore.State>,
+    user: Pair<String, String>,
+    alt: List<String>,
+    onBackClick: () -> Unit,
+    onClickLike: () -> Unit,
+) {
     Scaffold {
         LazyColumn(
             modifier = Modifier.background(MaterialTheme.colorScheme.background),
             contentPadding = PaddingValues(start = 3.dp, end = 3.dp)
         ) {
-
             item {
                 CardContent(
                     modifier = Modifier
@@ -85,19 +101,13 @@ fun DetailsContent(component: DetailsComponent) {
             item {
                 ContentActions(
                     isFavorite = state.value.isFavorite,
-                    onClickLike = { component.onClickLike() },
-                    onClickShare = { }
-                )
+                    onClickLike = onClickLike,
+                    onClickShare = { })
             }
-            item {
-                Spacer(modifier = Modifier.padding(top = 20.dp))
-                MoreSimilarContent(alt = alt)
-            }
+            item { Spacer(modifier = Modifier.padding(top = 20.dp)); MoreSimilarContent(alt = alt) }
         }
-        ButtomBack(modifier = Modifier.padding(it)) { component.onBackClick() }
+        ButtomBack(modifier = Modifier.padding(it)) { onBackClick() }
     }
-
-
 }
 
 @Preview

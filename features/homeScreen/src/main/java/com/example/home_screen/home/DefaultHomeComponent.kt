@@ -1,6 +1,5 @@
 package com.example.home_screen.home
 
-import android.os.Parcelable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
@@ -17,7 +16,7 @@ import dagger.assisted.AssistedInject
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 class DefaultHomeComponent @AssistedInject constructor(
     private val trendsComponentFactory: DefaultTrendsComponent.Factory,
@@ -32,6 +31,8 @@ class DefaultHomeComponent @AssistedInject constructor(
         childStack(
             source = navigation,
             initialConfiguration = Config.Trends,
+            serializer = Config.serializer(),
+            handleBackButton = true,
             childFactory = ::child
         )
 
@@ -41,16 +42,17 @@ class DefaultHomeComponent @AssistedInject constructor(
 
     override fun onClickContent(component: ContentUI) = onContentClick(component)
     override fun onClickCategoryContent(categoryTab: TabContents) {
-       when(categoryTab){
-           TabContents.SUBSCRIPTIONS -> {
-               navigation.bringToFront(Config.Subscriptions)
-               _selectedTab.value = TabContents.SUBSCRIPTIONS
-           }
-           TabContents.TRENDS -> {
-               navigation.bringToFront(Config.Trends)
-               _selectedTab.value = TabContents.TRENDS
-           }
-       }
+        when (categoryTab) {
+            TabContents.SUBSCRIPTIONS -> {
+                navigation.bringToFront(Config.Subscriptions)
+                _selectedTab.value = TabContents.SUBSCRIPTIONS
+            }
+
+            TabContents.TRENDS -> {
+                navigation.bringToFront(Config.Trends)
+                _selectedTab.value = TabContents.TRENDS
+            }
+        }
     }
 
     private fun child(
@@ -74,11 +76,12 @@ class DefaultHomeComponent @AssistedInject constructor(
         }
     }
 
-    sealed interface Config : Parcelable {
-        @Parcelize
+    @Serializable
+    sealed interface Config {
+        @Serializable
         data object Trends : Config
 
-        @Parcelize
+        @Serializable
         data object Subscriptions : Config
     }
 
@@ -86,8 +89,8 @@ class DefaultHomeComponent @AssistedInject constructor(
     interface Factory {
         fun create(
             @Assisted("componentContext") componentContext: ComponentContext,
-            @Assisted("onContentClick")  onContentClick: (ContentUI) -> Unit,
-            ): DefaultHomeComponent
+            @Assisted("onContentClick") onContentClick: (ContentUI) -> Unit,
+        ): DefaultHomeComponent
     }
 }
 
