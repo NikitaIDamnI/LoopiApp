@@ -119,10 +119,7 @@ class TrendsScreenStoreFactory @Inject constructor(
         private var isThrottled = false
 
 
-        override fun executeIntent(
-            intent: TrendsScreenStore.Intent,
-            getState: () -> TrendsScreenStore.State,
-        ) {
+        override fun executeIntent(intent: TrendsScreenStore.Intent) {
             when (intent) {
                 is TrendsScreenStore.Intent.LoadNextContent -> loadNextContent(intent)
 
@@ -134,7 +131,7 @@ class TrendsScreenStoreFactory @Inject constructor(
         }
 
 
-        override fun executeAction(action: Action, getState: () -> TrendsScreenStore.State) {
+        override fun executeAction(action: Action) {
             when (action) {
                 is Action.LoadFirstContent -> {
                     dispatch(

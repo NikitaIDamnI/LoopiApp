@@ -10,7 +10,6 @@ import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.create
 import retrofit2.http.GET
@@ -75,9 +74,7 @@ fun PexelsApi(
     apiKey: String,
     okHttpClient: OkHttpClient? = null,
     json: Json = Json,
-): PexelsApi {
-    return retrofit(baseUrl, apiKey, okHttpClient, json).create()
-}
+): PexelsApi = retrofit(baseUrl, apiKey, okHttpClient, json).create()
 
 private fun retrofit(
     baseUrl: String,

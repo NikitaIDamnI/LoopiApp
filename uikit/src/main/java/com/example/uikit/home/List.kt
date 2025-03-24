@@ -48,8 +48,8 @@ fun AspectoLazyColum(
             .padding(start = 5.dp, end = 5.dp),
         maxRowHeight = maxRowHeight,
         itemPadding = PaddingValues(
-            horizontal = 5.dp,
-            vertical = 4.dp
+            horizontal = 3.dp,
+            vertical = 3.dp
         ),
     ) {
         items(
@@ -81,7 +81,7 @@ fun AspectoLazyColum(
             )
         }
 
-        if (isLoading()){
+        if (isLoading()) {
             items(
                 items = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
                 key = { it },
