@@ -1,6 +1,5 @@
 package com.example.navigation.root
 
-import android.os.Parcelable
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
@@ -14,7 +13,7 @@ import com.example.uikit.models.ContentUI
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
-import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 
 
 class DefaultRootComponent @AssistedInject constructor(
@@ -29,8 +28,13 @@ class DefaultRootComponent @AssistedInject constructor(
         source = navigation,
         initialConfiguration = Config.NavigationScreen,
         handleBackButton = true,
-        childFactory = ::child
+        serializer = Config.serializer(),
+        childFactory = ::child,
     )
+
+    override fun onBackClicked() {
+        navigation.pop()
+    }
 
     private fun child(
         config: Config, componentContext: ComponentContext,
@@ -59,12 +63,13 @@ class DefaultRootComponent @AssistedInject constructor(
         }
     }
 
-    sealed interface Config : Parcelable {
+    @Serializable
+    sealed interface Config {
 
-        @Parcelize
+        @Serializable
         data object NavigationScreen : Config
 
-        @Parcelize
+        @Serializable
         data class ContentDetails(val content: ContentUI) : Config
     }
 

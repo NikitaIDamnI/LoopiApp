@@ -62,13 +62,13 @@ interface ContentDetailsStore : Store<Intent, State, Label> {
     }
 
     private class ExecutorImpl : CoroutineExecutor<Intent, Action, State, Msg, Label>() {
-        override fun executeIntent(intent: Intent, getState: () -> State) {
+        override fun executeIntent(intent: Intent) {
             when (intent) {
                 Intent.ClickBack -> {
                     publish(Label.ClickBack)
                 }
                 Intent.ClickLike -> {
-                    dispatch(Msg.FavouriteStatusChanged(!getState().isFavorite))
+                    dispatch(Msg.FavouriteStatusChanged (false))
                 }
                 Intent.ClickSetting -> {
                     publish(Label.ClickSetting)
@@ -79,7 +79,7 @@ interface ContentDetailsStore : Store<Intent, State, Label> {
             }
         }
 
-        override fun executeAction(action: Action, getState: () -> State) {
+        override fun executeAction(action: Action) {
         }
     }
 

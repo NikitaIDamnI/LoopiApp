@@ -1,8 +1,8 @@
 package com.example.navigation.navigationScreen
 
-import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -10,6 +10,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,7 +22,10 @@ import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 import com.example.home_screen.home.HomeComponent
-import kotlinx.parcelize.Parcelize
+import com.example.uikit.cards.CardLoading
+import com.example.uikit.home.generateRandomAspectRatio
+import com.vipulasri.aspecto.AspectoGrid
+import kotlinx.serialization.Serializable
 
 interface NavigationComponent {
 
@@ -29,24 +33,25 @@ interface NavigationComponent {
 
     fun navigateTo(tab: TabConfig)
 
-    sealed interface TabConfig : Parcelable {
+    @Serializable
+    sealed interface TabConfig  {
 
-        @Parcelize
+        @Serializable
         data object Home : TabConfig
 
-        @Parcelize
+        @Serializable
         data object Search : TabConfig
 
-        @Parcelize
+        @Serializable
         data object Add : TabConfig
 
-        @Parcelize
+        @Serializable
         data object Profile : TabConfig
 
-        @Parcelize
+        @Serializable
         data object Notifications : TabConfig
 
-        @Parcelize
+        @Serializable
         data object Filter : TabConfig
     }
 
@@ -71,11 +76,37 @@ class StubComponent(
     @Composable
     fun RenderNotBackPress() {
         Box(
-            modifier = Modifier.fillMaxSize(),
-
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background),
             contentAlignment = Alignment.Center
         ) {
-            Text(text = "ContentID: $title Screen", fontSize = 24.sp)
+            AspectoGrid(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(start = 5.dp, end = 5.dp),
+                maxRowHeight = 300.dp,
+                itemPadding = PaddingValues(
+                    horizontal = 5.dp,
+                    vertical = 4.dp
+                ),
+            )  {
+//                Icon(
+//                    modifier = Modifier.size(30.dp),
+//                    imageVector = Icons.Filled.Info,
+//                    contentDescription = ""
+//                )
+//                Text(text = "You have no subscriptions yet", fontSize = 30.sp)
+
+                items(
+                    items = listOf(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+                    key = { it },
+                    aspectRatio = { generateRandomAspectRatio() }
+                ) {
+                    CardLoading(Modifier)
+                }
+
+            }
 
         }
     }

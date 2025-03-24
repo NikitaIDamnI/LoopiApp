@@ -24,6 +24,7 @@ class DefaultNavigationComponent @AssistedInject constructor(
     override val stack: Value<ChildStack<*, NavigationComponent.Child>> = childStack(
         source = navigation,
         initialConfiguration = TabConfig.Home,
+        serializer = TabConfig.serializer(),
         childFactory = ::child
     )
 
@@ -43,7 +44,6 @@ class DefaultNavigationComponent @AssistedInject constructor(
                 NavigationComponent.Child.Home(component)
             }
 
-            // Заглушки для остальных экранов
             TabConfig.Search -> NavigationComponent.Child.Search(
                 StubComponent(
                     componentContext = componentContext,

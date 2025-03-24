@@ -76,6 +76,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
+    debugImplementation(libs.androidx.ui.tooling)
+
 
     implementation(project(":core:domain"))
     implementation(project(":core:common"))
